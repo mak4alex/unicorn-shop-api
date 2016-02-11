@@ -49,4 +49,5 @@ group :test do
   gem 'rspec-rails', '~> 2.14'
   gem 'factory_girl_rails', '~> 4.6'
   gem 'ffaker', '~> 2.2'
+  gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
 end
