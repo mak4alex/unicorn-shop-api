@@ -1,10 +1,12 @@
 class Api::V1::UsersController < ApplicationController
   respond_to :json
 
+  api!
   def show
     respond_with User.find(params[:id])
   end
 
+  api!
   def create
     user = User.new(user_params)
     if user.save
@@ -14,6 +16,7 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  api!
   def update
     user = User.find(params[:id])
 
@@ -24,6 +27,7 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  api!
   def destroy
     user = User.find(params[:id])
     user.destroy
