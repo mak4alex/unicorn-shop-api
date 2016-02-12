@@ -37,6 +37,9 @@ group :development, :test do
   gem 'byebug'
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
+  gem 'rspec-rails', '~> 3.4', '>= 3.4.2'
+  gem 'factory_girl_rails', '~> 4.6'
+  gem 'ffaker', '~> 2.2'
 end
 
 group :development do
@@ -48,8 +51,5 @@ group :development do
 end
 
 group :test do
-  gem 'rspec-rails', '~> 2.14'
-  gem 'factory_girl_rails', '~> 4.6'
-  gem 'ffaker', '~> 2.2'
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
 end

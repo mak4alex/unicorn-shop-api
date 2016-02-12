@@ -1,10 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V1::UsersController do
 
   describe 'GET #show' do
     before(:each) do
-      @user = FactoryGirl.create :user
+      @user = create :user
       get :show, id: @user.id
     end
 
@@ -13,14 +13,14 @@ describe Api::V1::UsersController do
       expect(user_response[:email]).to eql @user.email
     end
 
-    it { should respond_with 200 }
+    it { is_expected.to respond_with 200 }
   end
 
   describe 'POST #create' do
 
     context 'when is successfully created' do
       before(:each) do
-        @user_attributes = FactoryGirl.attributes_for :user
+        @user_attributes = attributes_for :user
         post :create, { user: @user_attributes }
       end
 
@@ -29,7 +29,7 @@ describe Api::V1::UsersController do
         expect(user_response[:email]).to eql @user_attributes[:email]
       end
 
-      it { should respond_with 201 }
+      it { is_expected.to respond_with 201 }
     end
 
     context 'when is not created' do
@@ -50,7 +50,7 @@ describe Api::V1::UsersController do
         expect(user_response[:errors][:email]).to include "can't be blank"
       end
 
-      it { should respond_with 422 }
+      it { is_expected.to respond_with 422 }
     end
   end
 
@@ -59,47 +59,47 @@ describe Api::V1::UsersController do
 
     context 'when is successfully updated' do
       before(:each) do
-        @user = FactoryGirl.create :user
+        @user = create :user
         patch :update, { id: @user.id,
-                         user: { email: "newmail@example.com" } }
+                         user: { email: 'newmail@example.com'} }
       end
 
       it 'renders the json representation for the updated user' do
         user_response = json_response
-        expect(user_response[:email]).to eql "newmail@example.com"
+        expect(user_response[:email]).to eql 'newmail@example.com'
       end
 
-      it { should respond_with 200 }
+      it { is_expected.to respond_with 200 }
     end
 
     context "when is not created" do
       before(:each) do
-        @user = FactoryGirl.create :user
+        @user = create :user
         patch :update, { id: @user.id,
                          user: { email: "bademail.com" } }
       end
 
-      it "renders an errors json" do
+      it 'renders an errors json' do
         user_response = json_response
         expect(user_response).to have_key(:errors)
       end
 
-      it "renders the json errors on whye the user could not be created" do
+      it 'renders the json errors on whye the user could not be created' do
         user_response = json_response
-        expect(user_response[:errors][:email]).to include "is invalid"
+        expect(user_response[:errors][:email]).to include 'is invalid'
       end
 
-      it { should respond_with 422 }
+      it { is_expected.to respond_with 422 }
     end
   end
 
   describe 'DELETE #destroy' do
     before(:each) do
-      @user = FactoryGirl.create :user
+      @user = create :user
       delete :destroy, { id: @user.id }
     end
 
-    it { should respond_with 204 }
+    it { is_expected.to respond_with 204 }
 
   end
 
