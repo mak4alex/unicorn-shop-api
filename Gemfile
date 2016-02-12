@@ -29,6 +29,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'capistrano-rails', group: :development
 
 gem 'devise', '~> 3.5', '>= 3.5.5'
+gem 'devise_token_auth', '~> 0.1.31'
 
 gem 'apipie-rails', '~> 0.3.5'
 
