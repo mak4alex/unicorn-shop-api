@@ -18,7 +18,7 @@ RSpec.describe Product, type: :model do
 
   it { should_not be_published }
 
-
+  it { should validate_numericality_of(:count).only_integer.is_greater_than_or_equal_to(0) }
   it { should validate_numericality_of(:price).is_greater_than(0.0) }
 
 end
