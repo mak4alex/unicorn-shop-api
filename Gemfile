@@ -32,6 +32,12 @@ gem 'devise', '~> 3.5', '>= 3.5.5'
 
 gem 'apipie-rails', '~> 0.3.5'
 
+group :production do
+  gem 'pg', '~> 0.18.4'
+  gem 'rails_12factor', '~> 0.0.3'
+  gem 'puma', '~> 2.16'
+end
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
