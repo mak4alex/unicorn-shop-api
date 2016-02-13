@@ -8,6 +8,7 @@ Rails.application.routes.draw do
           constraints: ApiConstraints.new(version: 1, default: true) do
       resources :users,      only: [:index, :show, :create, :update, :destroy]
       resources :categories, only: [:index, :show, :create, :update, :destroy]
+      resources :products,   only: [:index, :show, :create, :update, :destroy]
     end
   end
 end
