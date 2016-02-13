@@ -95,7 +95,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         expect(product_response).to have_key(:errors)
       end
 
-      it "renders the json errors on whye the user could not be created" do
+      it 'renders the json errors on why the product could not be updated' do
         product_response = json_response
         expect(product_response[:errors][:price]).to include "is not a number"
       end
@@ -105,12 +105,31 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before(:each) do
-      @product = create :product
-      delete :destroy, { id: @product.id }
+
+    context 'when is successfully destroy' do
+      before(:each) do
+        @product = create :product
+        delete :destroy, { id: @product.id }
+      end
+
+      it { should respond_with 204 }
+
     end
 
-    it { should respond_with 204 }
+    context 'when is product not found' do
+      before(:each) do
+         delete :destroy, { id: 0 }
+      end
+
+      it 'renders the json errors on why the product could not be destroyed' do
+        product_response = json_response
+        expect(product_response[:errors]).to include 'Resource not found'
+      end
+
+      it { should respond_with 404 }
+
+    end
+
   end
 
 end
