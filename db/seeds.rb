@@ -9,3 +9,9 @@
 User.create!({ email: 'user@example.com',
                password: 'user@example.com',
                password_confirmation: 'user@example.com' } )
+
+
+10.times do |n|
+  Category.create!( title: "Category ##{n}",
+                    description: FFaker::Lorem.sentence )
+end
