@@ -9,3 +9,19 @@
 User.create!({ email: 'user@example.com',
                password: 'user@example.com',
                password_confirmation: 'user@example.com' } )
+
+
+10.times do |n|
+  Category.create!( title: "Category ##{n}",
+                    description: FFaker::Lorem.sentence )
+end
+
+
+100.times do |n|
+  Product.create!( title: "Product ##{n}",
+                   description: FFaker::Lorem.sentence,
+                   price: rand.round(4) * 100,
+                   count: rand(1..20),
+                   published: n.even?,
+                   category_id: Category.ids.sample )
+end
