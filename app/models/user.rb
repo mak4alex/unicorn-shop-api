@@ -8,10 +8,10 @@ class User < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
 
   before_validation do
-    self.uid = 'email' if uid.blank?
+    self.uid = email if uid.blank?
   end
 
   validates :email, presence: true, uniqueness: true
-  validates_format_of :email, :with => Devise::email_regexp
+  validates_format_of :email, with: Devise::email_regexp
 
 end

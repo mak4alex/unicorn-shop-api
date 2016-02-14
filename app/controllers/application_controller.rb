@@ -1,11 +1,12 @@
 class ApplicationController < ActionController::Base
+  include DeviseTokenAuth::Concerns::SetUserByToken
   protect_from_forgery with: :null_session
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
 
   def not_found
-    api_error(status: 404, errors: ['Resource not found'])
+    api_error(status: 404, errors: ['Resource not found.'])
   end
 
   def api_error(status: 500, errors: [])

@@ -66,8 +66,11 @@ RSpec.configure do |config|
   end
 
   #Including to test requests
-  config.include Request::JsonHelpers, :type => :controller
-  config.include Request::HeadersHelpers, :type => :controller
+  config.include Request::JsonHelpers, type: :controller
+  config.include Request::HeadersHelpers, type: :controller
+  config.include Request::AuthHelper, type: :controller
+  config.include Devise::TestHelpers, type: :controller
+
   config.before(:each, type: :controller) do
     include_default_accept_headers
   end
@@ -76,5 +79,5 @@ RSpec.configure do |config|
   # Include Factory Girl syntax to simplify calls to factories
   config.include FactoryGirl::Syntax::Methods
 
-  config.include Devise::TestHelpers, type: :controller
+
 end

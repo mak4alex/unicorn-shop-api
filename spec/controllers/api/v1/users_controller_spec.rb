@@ -39,7 +39,7 @@ describe Api::V1::UsersController do
 
       it 'returns the errors' do
         user_response = json_response
-        expect(user_response[:errors]).to include('Resource not found')
+        expect(user_response[:errors]).to include('Resource not found.')
       end
 
       it { is_expected.to respond_with 404 }

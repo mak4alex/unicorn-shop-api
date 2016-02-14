@@ -1,5 +1,6 @@
 class Api::V1::CategoriesController < ApplicationController
   respond_to :json
+  before_action :authenticate_api_user!, only: [:create, :update, :destroy]
   before_action :set_category, only: [:show, :update, :destroy]
 
   api! 'List all categories'

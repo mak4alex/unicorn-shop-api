@@ -32,6 +32,10 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
   end
 
   describe 'POST #create' do
+    before(:each) do
+      @user = create :user
+      auth_request @user
+    end
 
     context 'when is successfully created' do
       before(:each) do
@@ -70,6 +74,8 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
 
   describe 'PUT/PATCH #update' do
     before(:each) do
+      @user = create :user
+      auth_request @user
       @category = create :category
     end
 
@@ -106,12 +112,54 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before(:each) do
-      @category = create :category
-      delete :destroy, { id: @category.id }
+
+    context 'when user authenticate' do
+      before(:each) do
+        @user = create :user
+        auth_request @user
+      end
+
+      context 'when category exists' do
+        before(:each) do
+          @category = create :category
+          delete :destroy, { id: @category.id }
+        end
+
+        it { should respond_with 204 }
+
+      end
+
+      context 'when category does not exist' do
+        before(:each) do
+          delete :destroy, { id: 0 }
+        end
+
+        it 'renders the json errors on why the category could not be destroyed' do
+          category_response = json_response
+          expect(category_response[:errors]).to include 'Resource not found.'
+        end
+
+        it { should respond_with 404 }
+
+      end
+
     end
 
-    it { should respond_with 204 }
+    context 'when user not authenticate' do
+      before(:each) do
+        @category = create :category
+        delete :destroy, { id: @category.id }
+      end
+
+      it 'renders the json errors on why the category could not be destroyed' do
+        category_response = json_response
+        expect(category_response[:errors]).to include 'Authorized users only.'
+      end
+
+      it { should respond_with 401 }
+
+    end
+
   end
 
 end

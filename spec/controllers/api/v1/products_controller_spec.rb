@@ -123,7 +123,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
       it 'renders the json errors on why the product could not be destroyed' do
         product_response = json_response
-        expect(product_response[:errors]).to include 'Resource not found'
+        expect(product_response[:errors]).to include 'Resource not found.'
       end
 
       it { should respond_with 404 }
