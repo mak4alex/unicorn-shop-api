@@ -165,7 +165,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_model_serializers (~> 0.9.3)
+  active_model_serializers (~> 0.9.4)
   apipie-rails (~> 0.3.5)
   byebug
   devise (~> 3.5, >= 3.5.5)
