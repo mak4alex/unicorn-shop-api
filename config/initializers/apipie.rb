@@ -5,4 +5,5 @@ Apipie.configure do |config|
   config.reload_controllers      = Rails.env.development?
   config.default_version         = '1'
   config.api_controllers_matcher = "#{Rails.root}/app/controllers/**/*.rb"
+  config.validate = false
 end

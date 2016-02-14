@@ -59,7 +59,7 @@ class Api::V1::ProductsController < ApplicationController
     end
 
     def product_params
-      params.require(:product).permit( :title, :description, :price,
+      params.fetch(:product, {}).permit( :title, :description, :price,
                                        :count, :published, :category_id)
     end
 
