@@ -1,6 +1,7 @@
 class Api::V1::CategoriesController < ApplicationController
   respond_to :json
   before_action :authenticate_api_user!, only: [:create, :update, :destroy]
+  before_action :manager_only!, only: [:create, :update, :destroy]
   before_action :set_category, only: [:show, :update, :destroy]
 
   api! 'List all categories'
@@ -47,8 +48,6 @@ class Api::V1::CategoriesController < ApplicationController
     head 204
   end
 
-
-
   private
 
     def set_category
@@ -56,7 +55,7 @@ class Api::V1::CategoriesController < ApplicationController
     end
 
     def category_params
-      params.require(:category).permit( :title, :description )
+      params.fetch(:category, {}).permit( :title, :description )
     end
 
 end

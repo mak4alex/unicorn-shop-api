@@ -1,5 +1,7 @@
 class Api::V1::ProductsController < ApplicationController
   respond_to :json
+  before_action :authenticate_api_user!, only: [:create, :update, :destroy]
+  before_action :manager_only!, only: [:create, :update, :destroy]
   before_action :set_product, only: [:show, :update, :destroy]
 
   api! 'List all products'
@@ -49,8 +51,6 @@ class Api::V1::ProductsController < ApplicationController
     @product.destroy
     head 204
   end
-
-
 
   private
 

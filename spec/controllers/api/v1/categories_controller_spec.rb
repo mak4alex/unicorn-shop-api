@@ -55,8 +55,8 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
 
     context 'when user authenticate' do
       before(:each) do
-        @user = create :user
-        auth_request @user
+        @manager = create :manager
+        auth_request @manager
       end
 
       context 'when is successfully created' do
@@ -121,8 +121,8 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
 
     context 'when user authenticate' do
       before(:each) do
-        @user = create :user
-        auth_request @user
+        @manager = create :manager
+        auth_request @manager
       end
 
       context 'when is successfully updated' do
@@ -179,32 +179,53 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
   describe 'DELETE #destroy' do
 
     context 'when user authenticate' do
-      before(:each) do
-        @user = create :user
-        auth_request @user
-      end
 
-      context 'when category exists' do
+      context 'as customer' do
         before(:each) do
+          @customer = create :user
+          auth_request @customer
           @category = create :category
           delete :destroy, { id: @category.id }
         end
 
-        it { should respond_with 204 }
+        it 'renders the json errors on why the category could not be destroyed' do
+          category_response = json_response
+          expect(category_response[:errors]).to include 'Error 403 Access Denied/Forbidden.'
+        end
+
+        it { should respond_with 403 }
 
       end
 
-      context 'when category does not exist' do
+      context 'as manager' do
         before(:each) do
-          delete :destroy, { id: 0 }
+          @manager = create :manager
+          auth_request @manager
         end
 
-        it 'renders the json errors on why the category could not be destroyed' do
-          category_response = json_response
-          expect(category_response[:errors]).to include 'Resource not found.'
+        context 'when category exists' do
+          before(:each) do
+            @category = create :category
+            delete :destroy, { id: @category.id }
+          end
+
+          it { should respond_with 204 }
+
         end
 
-        it { should respond_with 404 }
+        context 'when category does not exist' do
+          before(:each) do
+            delete :destroy, { id: 0 }
+          end
+
+          it 'renders the json errors on why the category could not be destroyed' do
+            category_response = json_response
+            expect(category_response[:errors]).to include 'Resource not found.'
+          end
+
+          it { should respond_with 404 }
+
+        end
 
       end
 

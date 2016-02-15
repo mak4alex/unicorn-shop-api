@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
-  include DeviseTokenAuth::Concerns::SetUserByToken
   protect_from_forgery with: :null_session
+  include DeviseTokenAuth::Concerns::SetUserByToken
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
@@ -10,6 +10,11 @@ class ApplicationController < ActionController::Base
       format.json { render json: { welcome: 'Hello from unicorn online-shop web-service',
                                    date: Date.now }, status: 200 }
     end
+  end
+
+  def manager_only!
+      api_error(status: 403,
+              errors: ['Error 403 Access Denied/Forbidden.']) unless current_api_user.manager?
   end
 
   def not_found

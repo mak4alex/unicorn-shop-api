@@ -31,44 +31,76 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
   end
 
   describe 'POST #create' do
-    context 'when is successfully created' do
-      before(:each) do
-        @product_attributes = attributes_for :product, category_id: 1, published: ''
-        post :create, { product: @product_attributes }
+
+    context 'when user authenticated' do
+
+      context 'as customer' do
+
+        before(:each) do
+          @customer = create :user
+          auth_request @customer
+          @product_attributes = attributes_for :product, category_id: 1, published: ''
+          post :create, { product: @product_attributes }
+        end
+
+        it 'renders the json errors on why the product could not be created' do
+          product_response = json_response
+          expect(product_response[:errors]).to include 'Error 403 Access Denied/Forbidden.'
+        end
+
+        it { should respond_with 403 }
+
       end
 
-      it 'renders the json representation for the product record just created' do
-        product_response = json_response
-        expect(product_response[:title]).to eql @product_attributes[:title]
+      context 'as manager' do
+        before(:each) do
+          auth_request create(:manager)
+        end
+
+        context 'when is successfully created' do
+          before(:each) do
+            @product_attributes = attributes_for :product, category_id: 1, published: ''
+            post :create, { product: @product_attributes }
+          end
+
+          it 'renders the json representation for the product record just created' do
+            product_response = json_response
+            expect(product_response[:title]).to eql @product_attributes[:title]
+          end
+
+          it { should respond_with 201 }
+        end
+
+        context 'when is not created' do
+          before(:each) do
+            @invalid_product_attributes = attributes_for :product, quantity: 'Twelve dollars',
+                                                         category_id: 1, published: ''
+            post :create, { product: @invalid_product_attributes }
+          end
+
+          it 'renders an errors json' do
+            product_response = json_response
+            expect(product_response).to have_key(:errors)
+          end
+
+          it 'renders the json errors on whye the user could not be created' do
+            product_response = json_response
+            expect(product_response[:errors][:quantity]).to include 'is not a number'
+          end
+
+          it { should respond_with 422 }
+        end
+
       end
 
-      it { should respond_with 201 }
     end
 
-    context 'when is not created' do
-      before(:each) do
-        @invalid_product_attributes = attributes_for :product, price: 'Twelve dollars',
-                                                     category_id: 1, published: ''
-        post :create, { product: @invalid_product_attributes }
-      end
-
-      it 'renders an errors json' do
-        product_response = json_response
-        expect(product_response).to have_key(:errors)
-      end
-
-      it 'renders the json errors on whye the user could not be created' do
-        product_response = json_response
-        expect(product_response[:errors][:price]).to include "is not a number"
-      end
-
-      it { should respond_with 422 }
-    end
   end
 
 
   describe 'PUT/PATCH #update' do
     before(:each) do
+      auth_request create(:manager)
       @product = create :product
     end
 
@@ -108,6 +140,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
     context 'when is successfully destroy' do
       before(:each) do
+        auth_request create(:manager)
         @product = create :product
         delete :destroy, { id: @product.id }
       end
@@ -118,7 +151,8 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
     context 'when is product not found' do
       before(:each) do
-         delete :destroy, { id: 0 }
+        auth_request create(:manager)
+        delete :destroy, { id: 0 }
       end
 
       it 'renders the json errors on why the product could not be destroyed' do
