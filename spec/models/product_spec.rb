@@ -8,11 +8,14 @@ RSpec.describe Product, type: :model do
   it { should respond_to(:description) }
   it { should respond_to(:price) }
   it { should respond_to(:quantity) }
+  it { should respond_to(:weight) }
   it { should respond_to(:published) }
 
   it { should validate_presence_of(:title) }
   it { should validate_presence_of(:description) }
   it { should validate_presence_of(:price) }
+  it { should validate_presence_of(:weight) }
+  it { should validate_presence_of(:category) }
 
   it { should belong_to(:category) }
 
