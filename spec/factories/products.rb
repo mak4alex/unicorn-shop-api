@@ -5,7 +5,7 @@ FactoryGirl.define do
     price { rand.round(4) * 100 }
     quantity { rand(1..20) }
     published false
-    weight { rand.round(5) * 100 }
+    weight { rand.round(5) * 1000 }
     category
 
     factory :published_product do

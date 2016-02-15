@@ -6,7 +6,7 @@ class Product < ActiveRecord::Base
   validates :description, presence: true, length: { minimum: 16 }
   validates :quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :price, presence: true, numericality: { greater_than: 0.0 }
-  validates :category, presence: true
+  validates :category_id, presence: true
   validates :weight, presence: true
 
 end
