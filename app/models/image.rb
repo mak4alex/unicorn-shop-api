@@ -6,7 +6,7 @@ class Image < ActiveRecord::Base
   mount_uploader :file, ImageUploader
 
   validates :file, presence: true
-  validates :imageable_id, presence: true
+
   validates :imageable_type, presence: true,
             inclusion: { in: IMAGEABLE_TYPES, message: "is not included in #{IMAGEABLE_TYPES}" }
 

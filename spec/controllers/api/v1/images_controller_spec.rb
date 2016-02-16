@@ -2,10 +2,43 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::ImagesController, type: :controller do
 
+  describe 'GET #index' do
+    before(:each) do
+      5.times { create :product_image }
+      get :index
+    end
+
+    it 'returns 5 product image records from the database' do
+      products_response = json_response
+      expect(products_response[:images]).to have_at_least(5).items
+    end
+
+    it { should respond_with 200 }
+  end
+
+  describe 'GET #show' do
+    before(:each) do
+      @image = create :product_image
+      get :show, id: @image.id
+    end
+
+    it 'returns the information about a image on a hash' do
+      product_response = json_response[:image]
+      expect(product_response[:image]).to eql @image.file.url
+    end
+
+    it { should respond_with 200 }
+  end
+
   describe 'POST #create' do
+    before(:each) do
+      @user = create :user
+      auth_request @user
+    end
 
     context 'when is successfully created' do
       before(:each) do
+
         @image_attributes = attributes_for :product_image
         post :create, image: @image_attributes
       end
@@ -43,5 +76,55 @@ RSpec.describe Api::V1::ImagesController, type: :controller do
 
   end
 
+  describe 'DELETE #destroy' do
+
+    context 'when user authenticate' do
+      before(:each) do
+        @user = create :user
+        auth_request @user
+      end
+
+      context 'when image exists' do
+        before(:each) do
+          @image = create :product_image
+          delete :destroy, { id: @image.id}
+        end
+
+        it { should respond_with 204 }
+
+      end
+
+      context 'when category does not exist' do
+        before(:each) do
+          delete :destroy, { id: 0 }
+        end
+
+        it 'renders the json errors on why the image could not be destroyed' do
+          image_response = json_response
+          expect(image_response[:errors]).to include 'Resource not found.'
+        end
+
+        it { should respond_with 404 }
+
+      end
+
+    end
+
+    context 'when user not authenticate' do
+      before(:each) do
+        @image = create :product_image
+        delete :destroy, { id: @image.id}
+      end
+
+      it 'renders the json errors on why the image could not be destroyed' do
+        category_response = json_response
+        expect(category_response[:errors]).to include 'Authorized users only.'
+      end
+
+      it { should respond_with 401 }
+
+    end
+
+  end
 
 end
