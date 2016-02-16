@@ -34,9 +34,9 @@ ActiveRecord::Schema.define(version: 20160216074012) do
   add_index "favourites", ["user_id"], name: "index_favourites_on_user_id"
 
   create_table "images", force: :cascade do |t|
+    t.string   "file"
     t.integer  "imageable_id"
     t.string   "imageable_type"
-    t.string   "file"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
   end

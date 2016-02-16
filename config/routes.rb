@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       resources :users,      only: [:index, :show, :create, :update, :destroy]
       resources :categories, only: [:index, :show, :create, :update, :destroy]
       resources :products,   only: [:index, :show, :create, :update, :destroy]
+      resources :images,     only: [:index, :show, :create, :destroy]
     end
   end
 end
