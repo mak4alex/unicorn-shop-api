@@ -14,6 +14,9 @@ RSpec.describe Order, type: :model do
 
   it { should belong_to(:user) }
 
+  it { should have_many(:line_items) }
+  it { should have_many(:products).through(:line_items) }
+
   it { should validate_numericality_of(:total).is_greater_than(0.0) }
 
   it { should validate_inclusion_of(:status).in_array(Order::STATUSES) }

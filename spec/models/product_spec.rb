@@ -18,7 +18,10 @@ RSpec.describe Product, type: :model do
   it { should validate_presence_of(:category_id) }
 
   it { should belong_to(:category) }
+
   it { should have_many(:images) }
+  it { should have_many(:line_items) }
+  it { should have_many(:orders).through(:line_items) }
 
   it { should_not be_published }
 

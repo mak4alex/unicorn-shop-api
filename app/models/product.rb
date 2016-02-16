@@ -1,6 +1,8 @@
 class Product < ActiveRecord::Base
   belongs_to :category
   has_many :images, as: :imageable
+  has_many :line_items
+  has_many :orders, through: :line_items
 
   validates :title, presence: true, uniqueness: { case_sensitive: false },
             length: { minimum: 3, maximum: 64 }
