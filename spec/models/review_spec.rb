@@ -16,6 +16,7 @@ RSpec.describe Review, type: :model do
 
   it { should belong_to(:product) }
   it { should belong_to(:user) }
+  it { should have_many(:images) }
 
 
   it { should validate_numericality_of(:rating).only_integer

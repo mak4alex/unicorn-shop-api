@@ -79,5 +79,8 @@ RSpec.configure do |config|
   # Include Factory Girl syntax to simplify calls to factories
   config.include FactoryGirl::Syntax::Methods
 
+  config.after(:each) do
+    FileUtils.rm_rf(Dir["#{Rails.root}/public/uploads/tmp"])
+  end
 
 end

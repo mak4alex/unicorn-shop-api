@@ -15,6 +15,10 @@ gem 'devise', '~> 3.5', '>= 3.5.5'
 gem 'devise_token_auth', '~> 0.1.31'
 
 gem 'apipie-rails', '~> 0.3.5'
+# Upload files, map them to a range of ORMs, store them on different backends.
+gem 'carrierwave', '~> 0.10.0'
+# Manipulate images with minimal use of memory via ImageMagick / GraphicsMagick
+gem 'mini_magick', '~> 4.4'
 
 group :production do
   gem 'pg', '~> 0.18.4'
