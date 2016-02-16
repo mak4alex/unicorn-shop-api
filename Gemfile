@@ -20,11 +20,13 @@ gem 'carrierwave', '~> 0.10.0'
 # Manipulate images with minimal use of memory via ImageMagick / GraphicsMagick
 gem 'mini_magick', '~> 4.4'
 
+gem 'fog', '~> 1.37'
+
 group :production do
   gem 'pg', '~> 0.18.4'
   gem 'rails_12factor', '~> 0.0.3'
   gem 'puma', '~> 2.16'
-  gem 'fog-google', '~> 0.1.1'
+  gem 'fog-google', '~> 0.1.0'
 end
 
 group :development, :test do
