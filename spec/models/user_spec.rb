@@ -26,6 +26,8 @@ describe User do
 
   it { should_not be_manager }
 
+  it { should have_many(:orders) }
+
   context 'manager role' do
     subject { manager }
 

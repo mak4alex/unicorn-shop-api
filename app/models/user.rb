@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
     self.uid = email if uid.blank?
   end
 
+  has_many :orders
+
   validates :email, presence: true, uniqueness: true
   validates_format_of :email, with: Devise::email_regexp
   validates :role, presence: true, inclusion: { in: ROLES }
