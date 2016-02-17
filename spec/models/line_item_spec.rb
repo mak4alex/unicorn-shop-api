@@ -8,8 +8,8 @@ RSpec.describe LineItem, type: :model do
   it { should respond_to :product_id }
 
   it { should validate_presence_of :quantity }
-  it { should validate_presence_of :order_id }
-  it { should validate_presence_of :product_id }
+  it { should validate_presence_of :order }
+  it { should validate_presence_of :product }
 
   it { should belong_to(:order) }
   it { should belong_to(:product) }

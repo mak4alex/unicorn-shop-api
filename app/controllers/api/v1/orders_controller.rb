@@ -16,11 +16,24 @@ class Api::V1::OrdersController < ApplicationController
     respond_with @order
   end
 
+  def create
+    order = Order.make_order(order_params, current_api_user)
+    if order.save
+      render json: order, status: 201, location: [:api, order]
+    else
+      render json: { errors: order.errors }, status: 422
+    end
+  end
+
 
   private
 
     def set_order
       @order = Order.find(params[:id])
+    end
+
+    def order_params
+      params.require(:order).permit(:total, :pay_type, line_items: [:product_id, :quantity])
     end
 
     def only_customer_own_order

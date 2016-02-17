@@ -115,4 +115,49 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
 
   end
 
+  describe 'POST #create' do
+    before(:each) do
+      @customer = create :user
+      auth_request @customer
+
+      @product_1 = create :product, price: 100
+      @product_2 = create :product, price: 200
+
+      @line_item_1 = attributes_for :line_item, product_id: @product_1.id, quantity: 2
+      @line_item_2 = attributes_for :line_item, product_id: @product_2.id, quantity: 5
+
+    end
+
+    context 'when total is correct' do
+      before(:each) do
+        order_params = { total: 1200, pay_type: 'cash', line_items: [@line_item_1, @line_item_2] }
+        post :create, order: order_params
+      end
+
+      it 'returns the just user order record' do
+        order_response = json_response[:order]
+        expect(order_response[:id]).to be_present
+        expect(order_response[:total]).to eql '1200.0'
+      end
+
+      it { should respond_with 201 }
+
+    end
+
+    context 'when some bitch try to cheat with invalid total' do
+      before(:each) do
+        order_params = { total: 500, pay_type: 'cash', line_items: [@line_item_1, @line_item_2] }
+        post :create, order: order_params
+      end
+
+      it 'returns the error why order record not created' do
+        order_response = json_response
+        expect(order_response[:errors][:total]).to include 'is miscalculated'
+      end
+
+      it { should respond_with 422 }
+    end
+
+  end
+
 end
