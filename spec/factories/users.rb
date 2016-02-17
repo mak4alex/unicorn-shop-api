@@ -5,8 +5,12 @@ FactoryGirl.define do
     password_confirmation '12345678'
     role 'customer'
 
-    factory :manager do
+    trait :manager do
       role 'manager'
+    end
+
+    trait :guest do
+      role 'guest'
     end
 
   end

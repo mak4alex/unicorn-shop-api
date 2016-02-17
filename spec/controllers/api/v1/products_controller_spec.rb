@@ -54,7 +54,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
       context 'as manager' do
         before(:each) do
-          auth_request create(:manager)
+          auth_request create(:user, :manager)
         end
 
         context 'when is successfully created' do
@@ -100,7 +100,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
   describe 'PUT/PATCH #update' do
     before(:each) do
-      auth_request create(:manager)
+      auth_request (create :user, :manager)
       @product = create :product
     end
 
@@ -140,7 +140,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
     context 'when is successfully destroy' do
       before(:each) do
-        auth_request create(:manager)
+        auth_request create(:user, :manager)
         @product = create :product
         delete :destroy, { id: @product.id }
       end
@@ -151,7 +151,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
     context 'when is product not found' do
       before(:each) do
-        auth_request create(:manager)
+        auth_request create(:user, :manager)
         delete :destroy, { id: 0 }
       end
 

@@ -55,7 +55,7 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
 
     context 'when user authenticate' do
       before(:each) do
-        @manager = create :manager
+        @manager = create :user, :manager
         auth_request @manager
       end
 
@@ -121,7 +121,7 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
 
     context 'when user authenticate' do
       before(:each) do
-        @manager = create :manager
+        @manager = create :user, :manager
         auth_request @manager
       end
 
@@ -199,7 +199,7 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
 
       context 'as manager' do
         before(:each) do
-          @manager = create :manager
+          @manager = create :user, :manager
           auth_request @manager
         end
 
