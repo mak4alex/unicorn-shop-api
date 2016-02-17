@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe User do
   let(:user) { build(:user) }
-  let(:manager) { build(:manager) }
+  let(:manager) { build(:user, :manager) }
 
   subject { user }
 
