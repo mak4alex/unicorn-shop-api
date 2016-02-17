@@ -1,0 +1,12 @@
+Order: #<%= @order.id %>
+
+You ordered <%= @order.line_items.count %> product positions:
+
+<% @order.line_items.each do |line_item| %>
+  <%= line_item.product.title %> -
+  <%= number_to_currency line_item.product.price %> *
+  <%= line_item.quantity %> =
+  <%= number_to_currency line_item.product.price * line_item.quantity %>
+<% end %>
+
+Total sum: <%= @order.total %>

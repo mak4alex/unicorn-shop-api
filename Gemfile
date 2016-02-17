@@ -49,4 +49,5 @@ end
 group :test do
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'rspec-collection_matchers', '~> 1.1', '>= 1.1.2'
+  gem 'email_spec', '~> 2.0'
 end

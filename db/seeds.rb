@@ -21,7 +21,8 @@ end
   Product.create!( title: "Product ##{n}",
                    description: FFaker::Lorem.sentence,
                    price: rand.round(4) * 100,
-                   count: rand(1..20),
+                   quantity: rand(1..20),
                    published: n.even?,
-                   category_id: Category.ids.sample )
+                   category_id: Category.ids.sample,
+                   weight: 1 )
 end

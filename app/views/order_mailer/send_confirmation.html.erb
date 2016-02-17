@@ -1,0 +1,16 @@
+<h1>Order: #<%= @order.id %></h1>
+
+<p>You ordered <%= @order.line_items.count %> product positions:</p>
+
+<ul>
+  <% @order.line_items.each do |line_item| %>
+    <li>
+      <%= line_item.product.title %> -
+      <%= number_to_currency line_item.product.price %> *
+      <%= line_item.quantity %> =
+      <%= number_to_currency line_item.product.price * line_item.quantity %>
+    </li>
+  <% end %>
+</ul>
+
+<p>Total sum: <%= @order.total %></p>
