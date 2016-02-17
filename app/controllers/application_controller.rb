@@ -13,8 +13,11 @@ class ApplicationController < ActionController::Base
   end
 
   def manager_only!
-      api_error(status: 403,
-              errors: ['Error 403 Access Denied/Forbidden.']) unless current_api_user.manager?
+    access_denied unless current_api_user.manager?
+  end
+
+  def access_denied
+    api_error(status: 403, errors: ['Error 403 Access Denied/Forbidden.'])
   end
 
   def not_found
