@@ -23,6 +23,8 @@ gem 'mini_magick', '~> 4.4'
 gem 'fog', '~> 1.37'
 # Kaminari is a Scope & Engine based, clean, powerful, agnostic, customizable and sophisticated paginator
 gem 'kaminari', '~> 0.16.3'
+# ActiveRecord backend for Delayed::Job, originally authored by Tobias Lütke
+gem 'delayed_job_active_record', '~> 4.1'
 
 group :production do
   gem 'pg', '~> 0.18.4'
