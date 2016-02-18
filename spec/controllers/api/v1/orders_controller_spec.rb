@@ -138,6 +138,7 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
         order_response = json_response[:order]
         expect(order_response[:id]).to be_present
         expect(order_response[:total]).to eql '1200.0'
+        expect(order_response[:products]).to have_exactly(2).items
       end
 
       it { should respond_with 201 }

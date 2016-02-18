@@ -21,6 +21,8 @@ gem 'carrierwave', '~> 0.10.0'
 gem 'mini_magick', '~> 4.4'
 
 gem 'fog', '~> 1.37'
+# Kaminari is a Scope & Engine based, clean, powerful, agnostic, customizable and sophisticated paginator
+gem 'kaminari', '~> 0.16.3'
 
 group :production do
   gem 'pg', '~> 0.18.4'
