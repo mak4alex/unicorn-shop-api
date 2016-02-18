@@ -20,7 +20,8 @@ class Api::V1::OrdersController < ApplicationController
   def create
     order = Order.make_order(order_params, current_api_user)
     if order.save
-      OrderMailer.delay.send_confirmation(order)
+      #OrderMailer.delay.send_confirmation(order)
+      OrderMailer.send_confirmation(order).deliver_now
       render json: order, status: 201, location: [:api, order]
     else
       render json: { errors: order.errors }, status: 422
