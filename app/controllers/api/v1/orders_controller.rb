@@ -5,16 +5,12 @@ class Api::V1::OrdersController < ApplicationController
   before_action :only_customer_own_order, only: [:show]
 
   def index
-
      if current_api_user.manager?
-       products =  Order.all.page(params[:page]).per(params[:per_page])
+       orders =  Order.all.page(params[:page]).per(params[:per_page])
      else
-       products = current_api_user.orders.page(params[:page]).per(params[:per_page])
+       orders = current_api_user.orders.page(params[:page]).per(params[:per_page])
      end
-     render json: products, meta: { pagination:
-                                      { per_page: params[:per_page],
-                                        total_pages: products.total_pages,
-                                        total_objects: products.total_count } }
+     render json: orders, meta: pagination(orders, params[:per_page])
   end
 
   def show
