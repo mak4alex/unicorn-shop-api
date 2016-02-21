@@ -4,14 +4,17 @@ RSpec.describe Order, type: :model do
   let(:order) { build :order }
   subject { order }
 
+  it { should be_valid }
+
+  it { should validate_presence_of(:total) }
+  it { should validate_presence_of(:pay_type) }
+  it { should validate_presence_of(:delivery_type) }
+
   it { should respond_to(:total) }
   it { should respond_to(:pay_type) }
   it { should respond_to(:status) }
 
-  it { should validate_presence_of(:total) }
-  it { should validate_presence_of(:pay_type) }
-
-  it { should belong_to(:user) }
+  it { should have_one(:contact) }
 
   it { should have_many(:line_items) }
   it { should have_many(:products).through(:line_items) }
@@ -20,5 +23,6 @@ RSpec.describe Order, type: :model do
 
   it { should validate_inclusion_of(:status).in_array(Order::STATUSES) }
   it { should validate_inclusion_of(:pay_type).in_array(Order::PAY_TYPES) }
+  it { should validate_inclusion_of(:delivery_type).in_array(Order::DELIVERY_TYPES) }
 
 end

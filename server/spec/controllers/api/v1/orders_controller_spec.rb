@@ -132,7 +132,7 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
 
     context 'when total is correct' do
       before(:each) do
-        order_params = { total: 1200, pay_type: 'cash', line_items: [@line_item_1, @line_item_2] }
+        order_params = { total: 1200, pay_type: 'cash', delivery_type: 'mail', line_items: [@line_item_1, @line_item_2] }
         post :create, order: order_params
       end
 

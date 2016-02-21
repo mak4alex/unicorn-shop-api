@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160218095002) do
+ActiveRecord::Schema.define(version: 20160221105726) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "title"
@@ -21,6 +21,21 @@ ActiveRecord::Schema.define(version: 20160218095002) do
   end
 
   add_index "categories", ["title"], name: "index_categories_on_title", unique: true
+
+  create_table "contacts", force: :cascade do |t|
+    t.string   "email"
+    t.string   "name"
+    t.string   "phone"
+    t.string   "country"
+    t.string   "city"
+    t.string   "address"
+    t.string   "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "order_id"
+  end
+
+  add_index "contacts", ["order_id"], name: "index_contacts_on_order_id"
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -37,6 +52,13 @@ ActiveRecord::Schema.define(version: 20160218095002) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+
+  create_table "discounts", force: :cascade do |t|
+    t.string   "title"
+    t.integer  "percent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "favourites", force: :cascade do |t|
     t.integer  "user_id"
@@ -72,11 +94,12 @@ ActiveRecord::Schema.define(version: 20160218095002) do
 
   create_table "orders", force: :cascade do |t|
     t.string   "status"
-    t.decimal  "total",      precision: 8, scale: 2
+    t.decimal  "total",         precision: 8, scale: 2
     t.string   "pay_type"
     t.integer  "user_id"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.string   "delivery_type"
   end
 
   add_index "orders", ["user_id"], name: "index_orders_on_user_id"
@@ -91,9 +114,11 @@ ActiveRecord::Schema.define(version: 20160218095002) do
     t.datetime "updated_at",                                        null: false
     t.integer  "quantity",                            default: 0
     t.decimal  "weight",      precision: 6, scale: 3, default: 0.0
+    t.integer  "discount_id"
   end
 
   add_index "products", ["category_id"], name: "index_products_on_category_id"
+  add_index "products", ["discount_id"], name: "index_products_on_discount_id"
   add_index "products", ["title"], name: "index_products_on_title", unique: true
 
   create_table "reviews", force: :cascade do |t|
@@ -127,6 +152,13 @@ ActiveRecord::Schema.define(version: 20160218095002) do
     t.string   "uid",                         default: "",         null: false
     t.text     "tokens"
     t.string   "role",                        default: "customer"
+    t.string   "name"
+    t.string   "sex"
+    t.string   "phone"
+    t.string   "country"
+    t.string   "city"
+    t.string   "address"
+    t.date     "birthday"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
