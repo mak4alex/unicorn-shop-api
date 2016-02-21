@@ -12,6 +12,12 @@ describe User do
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:role) }
+  it { should respond_to(:name) }
+  it { should respond_to(:phone) }
+  it { should respond_to(:country) }
+  it { should respond_to(:city) }
+  it { should respond_to(:address) }
+  it { should respond_to(:birthday) }
 
   it { should validate_presence_of(:email) }
   it { should validate_presence_of(:role) }
