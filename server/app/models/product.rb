@@ -1,5 +1,6 @@
 class Product < ActiveRecord::Base
   belongs_to :category
+  belongs_to :discount
   has_many :images, as: :imageable
   has_many :line_items
   has_many :orders, through: :line_items

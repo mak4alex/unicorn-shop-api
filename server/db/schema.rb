@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160221103333) do
+ActiveRecord::Schema.define(version: 20160221104547) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "title"
@@ -52,6 +52,13 @@ ActiveRecord::Schema.define(version: 20160221103333) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+
+  create_table "discounts", force: :cascade do |t|
+    t.string   "title"
+    t.integer  "percent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "favourites", force: :cascade do |t|
     t.integer  "user_id"
@@ -107,9 +114,11 @@ ActiveRecord::Schema.define(version: 20160221103333) do
     t.datetime "updated_at",                                        null: false
     t.integer  "quantity",                            default: 0
     t.decimal  "weight",      precision: 6, scale: 3, default: 0.0
+    t.integer  "discount_id"
   end
 
   add_index "products", ["category_id"], name: "index_products_on_category_id"
+  add_index "products", ["discount_id"], name: "index_products_on_discount_id"
   add_index "products", ["title"], name: "index_products_on_title", unique: true
 
   create_table "reviews", force: :cascade do |t|
