@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160218095002) do
+ActiveRecord::Schema.define(version: 20160221103333) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "title"
@@ -21,6 +21,21 @@ ActiveRecord::Schema.define(version: 20160218095002) do
   end
 
   add_index "categories", ["title"], name: "index_categories_on_title", unique: true
+
+  create_table "contacts", force: :cascade do |t|
+    t.string   "email"
+    t.string   "name"
+    t.string   "phone"
+    t.string   "country"
+    t.string   "city"
+    t.string   "address"
+    t.string   "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "order_id"
+  end
+
+  add_index "contacts", ["order_id"], name: "index_contacts_on_order_id"
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -72,11 +87,12 @@ ActiveRecord::Schema.define(version: 20160218095002) do
 
   create_table "orders", force: :cascade do |t|
     t.string   "status"
-    t.decimal  "total",      precision: 8, scale: 2
+    t.decimal  "total",         precision: 8, scale: 2
     t.string   "pay_type"
     t.integer  "user_id"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.string   "delivery_type"
   end
 
   add_index "orders", ["user_id"], name: "index_orders_on_user_id"
