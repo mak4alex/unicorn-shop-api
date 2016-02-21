@@ -36,7 +36,7 @@ class Api::V1::OrdersController < ApplicationController
     end
 
     def order_params
-      params.require(:order).permit(:total, :pay_type, line_items: [:product_id, :quantity])
+      params.require(:order).permit(:total, :pay_type, :delivery_type, line_items: [:product_id, :quantity])
     end
 
     def only_customer_own_order
