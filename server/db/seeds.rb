@@ -11,9 +11,15 @@ User.create!({ email: 'user@example.com',
                password_confirmation: 'user@example.com' } )
 
 
-10.times do |n|
+1.upto(10) do |n|
   Category.create!( title: "Category ##{n}",
                     description: FFaker::Lorem.sentence )
+end
+
+11.upto(30) do |n|
+  Category.create!( title: "Category ##{n}",
+                    description: FFaker::Lorem.sentence,
+                    parent_category_id: Category.ids.sample )
 end
 
 

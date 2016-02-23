@@ -11,15 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160221105726) do
+ActiveRecord::Schema.define(version: 20160223182126) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.integer  "parent_category_id"
   end
 
+  add_index "categories", ["parent_category_id"], name: "index_categories_on_parent_category_id"
   add_index "categories", ["title"], name: "index_categories_on_title", unique: true
 
   create_table "contacts", force: :cascade do |t|
