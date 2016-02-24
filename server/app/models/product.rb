@@ -16,8 +16,16 @@ class Product < ActiveRecord::Base
   validates :weight, presence: true
 
 
-  scope :sort, lambda { |params | order(params[:sort] ||= 'title asc') }
-  scope :paginate, lambda { |params| page(params[:page] ||= 1).per(params[:per_page] ||= 10)}
-  scope :fetch, lambda { |params |  sort(params).paginate(params) }
+  scope :sort, lambda { |params | order(params[:sort]) if params[:sort].present? }
+  scope :pagination,
+        (lambda do |params|
+          if params[:page].present? || params[:per_page].present?
+            params[:page] ||= 1
+            params[:per_page] ||= 10
+            page(params[:page]).per(params[:per_page])
+          end
+        end)
+
+  scope :fetch, lambda { |params|  sort(params).pagination(params) }
 
 end
