@@ -6,7 +6,7 @@ class Api::V1::ProductsController < ApplicationController
 
   api! 'List all products'
   def index
-    products = Product.sort(params).paginate(params)
+    products = Product.fetch(params)
     render json: { products: products, meta: get_meta(products, params) }
   end
 

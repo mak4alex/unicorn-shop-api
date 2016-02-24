@@ -5,7 +5,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
   describe 'GET #index' do
     before(:each) do
       5.times { create :product }
-      get :index
+      get :index, page: 1, sort: 'title asc'
     end
 
     it 'returns 5 product records from the database' do
@@ -13,7 +13,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       expect(products_response[:products]).to have(5).items
     end
 
-    it_behaves_like "paginated list"
+    it_behaves_like 'with meta data'
 
     it { should respond_with 200 }
   end
@@ -45,12 +45,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
           post :create, { product: @product_attributes }
         end
 
-        it 'renders the json errors on why the product could not be created' do
-          product_response = json_response
-          expect(product_response[:errors]).to include 'Error 403 Access Denied/Forbidden.'
-        end
-
-        it { should respond_with 403 }
+        it_behaves_like 'access forbidden'
 
       end
 
@@ -157,12 +152,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
         delete :destroy, { id: 0 }
       end
 
-      it 'renders the json errors on why the product could not be destroyed' do
-        product_response = json_response
-        expect(product_response[:errors]).to include 'Resource not found.'
-      end
-
-      it { should respond_with 404 }
+      it_behaves_like 'data does not exist'
 
     end
 
