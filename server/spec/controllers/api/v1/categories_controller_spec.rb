@@ -5,13 +5,46 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
   describe 'GET #index' do
     before(:each) do
       5.times { create :category }
-      get :index
+      get :index, sort: 'title desc', page: 1
     end
 
     it 'returns the information about all categories' do
       category_response = json_response
       expect(category_response[:categories]).to have(5).items
     end
+
+    it_behaves_like 'with meta data'
+
+    it { should respond_with 200 }
+  end
+
+
+  describe 'GET #count' do
+    before(:each) do
+      @category = create :category_with_subcategories, count: 5
+      get :count
+    end
+
+    it 'returns count of categories' do
+      count = json_response[:count]
+      expect(count).to eq 6
+    end
+
+    it { should respond_with 200 }
+  end
+
+  describe 'GET #products' do
+    before(:each) do
+      category = create :category_with_products, count: 5
+      get :products, id: category.id, sort: 'title desc', page: 1
+    end
+
+    it 'returns products from category' do
+      products_response = json_response[:products]
+      expect(products_response).to have_exactly(5).items
+    end
+
+    it_behaves_like 'with meta data'
 
     it { should respond_with 200 }
   end
@@ -29,6 +62,8 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
         expect(category_response[:title]).to eql @category.title
         expect(category_response[:description]).to eql @category.description
         expect(category_response).to have_key(:product_ids)
+        expect(category_response).to have_key(:parent_category_id)
+        expect(category_response).to have_key(:subcategory_ids)
       end
 
       it { should respond_with 200 }
@@ -40,16 +75,11 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
         get :show, id: 0
       end
 
-      it 'renders the json errors on why the category not showed' do
-        category_response = json_response
-        expect(category_response[:errors]).to include 'Resource not found.'
-      end
-
-      it { should respond_with 404 }
-
+      it_behaves_like 'data does not exist'
     end
 
   end
+
 
   describe 'POST #create' do
 
@@ -71,7 +101,6 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
         end
 
         it { should respond_with 201 }
-
       end
 
       context 'when is not created' do
@@ -80,18 +109,13 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
           post :create, { category: @invalid_category_attributes }
         end
 
-        it 'renders an errors json' do
-          category_response = json_response
-          expect(category_response).to have_key(:errors)
-        end
-
         it 'renders the json errors on why the category could not be created' do
           category_response = json_response
+          expect(category_response).to have_key(:errors)
           expect(category_response[:errors][:title]).to include "can't be blank"
         end
 
         it { should respond_with 422 }
-
       end
 
     end
@@ -102,13 +126,7 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
         post :create, { category: @category_attributes }
       end
 
-      it 'renders the json errors on why the category could not be created' do
-        category_response = json_response
-        expect(category_response[:errors]).to include 'Authorized users only.'
-      end
-
-      it { should respond_with 401 }
-
+      it_behaves_like 'not authenticate'
     end
 
   end
@@ -144,13 +162,9 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
           patch :update, { id: @category.id, category: { title: '' } }
         end
 
-        it 'renders an errors json' do
-          category_response = json_response
-          expect(category_response).to have_key(:errors)
-        end
-
         it 'renders the json errors on why the category could not be created' do
           category_response = json_response
+          expect(category_response).to have_key(:errors)
           expect(category_response[:errors][:title]).to include "can't be blank"
         end
 
@@ -165,12 +179,7 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
         patch :update, { id: @category.id, category: { title: 'New Category' } }
       end
 
-      it 'renders the json errors on why the category could not be updated' do
-        category_response = json_response
-        expect(category_response[:errors]).to include 'Authorized users only.'
-      end
-
-      it { should respond_with 401 }
+      it_behaves_like 'not authenticate'
 
     end
 
@@ -188,12 +197,7 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
           delete :destroy, { id: @category.id }
         end
 
-        it 'renders the json errors on why the category could not be destroyed' do
-          category_response = json_response
-          expect(category_response[:errors]).to include 'Error 403 Access Denied/Forbidden.'
-        end
-
-        it { should respond_with 403 }
+        it_behaves_like 'access forbidden'
 
       end
 
@@ -218,12 +222,7 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
             delete :destroy, { id: 0 }
           end
 
-          it 'renders the json errors on why the category could not be destroyed' do
-            category_response = json_response
-            expect(category_response[:errors]).to include 'Resource not found.'
-          end
-
-          it { should respond_with 404 }
+          it_behaves_like 'data does not exist'
 
         end
 
@@ -237,12 +236,7 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
         delete :destroy, { id: @category.id }
       end
 
-      it 'renders the json errors on why the category could not be destroyed' do
-        category_response = json_response
-        expect(category_response[:errors]).to include 'Authorized users only.'
-      end
-
-      it { should respond_with 401 }
+      it_behaves_like 'not authenticate'
 
     end
 
