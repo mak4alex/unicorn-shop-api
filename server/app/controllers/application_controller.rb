@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   include DeviseTokenAuth::Concerns::SetUserByToken
 
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+  rescue_from ActiveRecord::RecordNotFound,  with: :not_found
 
   def welcome
     respond_to do |format|
@@ -24,6 +24,10 @@ class ApplicationController < ActionController::Base
     api_error(status: 404, errors: ['Resource not found.'])
   end
 
+  def bad_request
+    api_error(status: 400, errors: ['The request could not be understood by the server due to malformed syntax.'])
+  end
+
   def api_error(status: 500, errors: [])
     unless Rails.env.production?
       puts errors.full_messages if errors.respond_to? :full_messages
@@ -36,10 +40,19 @@ class ApplicationController < ActionController::Base
 
   protected
 
-    def pagination(paginated_array, per_page)
-      { pagination: { per_page: per_page.to_i,
-                      total_pages: paginated_array.total_pages,
-                      total_objects: paginated_array.total_count } }
+    def get_meta (collection, params)
+      meta = {}
+      meta[:pagination] = pagination(collection, params) if params[:page].present?
+      meta[:sort] = params[:sort] if params[:sort].present?
+      meta[:filter] = params[:filter] if params[:filter].present?
+      meta
+    end
+
+    def pagination(paginated_array, params)
+      { page: params[:page].to_i,
+        per_page: params[:per_page].to_i,
+        total_pages: paginated_array.total_pages,
+        total_objects: paginated_array.total_count }
     end
 
 end

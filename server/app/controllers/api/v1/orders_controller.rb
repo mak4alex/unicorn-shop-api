@@ -10,7 +10,7 @@ class Api::V1::OrdersController < ApplicationController
      else
        orders = current_api_user.orders.page(params[:page]).per(params[:per_page])
      end
-     render json: orders, meta: pagination(orders, params[:per_page])
+     render json: orders, meta: get_meta(orders, params)
   end
 
   def show

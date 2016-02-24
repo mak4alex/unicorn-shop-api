@@ -6,8 +6,8 @@ class Api::V1::ProductsController < ApplicationController
 
   api! 'List all products'
   def index
-    products = Product.page(params[:page]).per(params[:per_page])
-    render json: products, meta: pagination(products, params[:per_page])
+    products = Product.sort(params).paginate(params)
+    render json: { products: products, meta: get_meta(products, params) }
   end
 
   api! 'Show product with id'

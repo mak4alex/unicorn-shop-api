@@ -1,12 +1,17 @@
 class Api::V1::CategoriesController < ApplicationController
-  respond_to :json
   before_action :authenticate_api_user!, only: [:create, :update, :destroy]
-  before_action :manager_only!, only: [:create, :update, :destroy]
-  before_action :set_category, only: [:show, :update, :destroy]
+  before_action :manager_only!,          only: [:create, :update, :destroy]
+  before_action :set_category,           only: [:show, :update, :destroy, :products]
 
   api! 'List all categories'
   def index
-    respond_with Category.all
+    categories = Category.fetch(params)
+    render json: categories, meta: get_meta(categories, params)
+  end
+
+  api! 'Show count of categories'
+  def count
+    render json: { count: Category.count }
   end
 
   api! 'Show category with id'
@@ -14,10 +19,17 @@ class Api::V1::CategoriesController < ApplicationController
     render json: @category
   end
 
+  api! 'List products on category'
+  def products
+    products = @category.products.fetch(params)
+    render json: { products: products, meta: get_meta(products, params) }
+  end
+
   def_param_group :category do
     param :category, Hash, required: true, action_aware: true do
       param :title, String, required: true
       param :description, String, required: true
+      param :parent_category_id, String
     end
   end
 
@@ -55,7 +67,7 @@ class Api::V1::CategoriesController < ApplicationController
     end
 
     def category_params
-      params.fetch(:category, {}).permit( :title, :description )
+      params.fetch(:category, {}).permit( :title, :description, :parent_category_id )
     end
 
 end
