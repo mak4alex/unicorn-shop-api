@@ -1,7 +1,7 @@
-class Api::Vi::ReviewsController < ApplicationController
+class Api::V1::ReviewsController < ApplicationController
   before_action :authenticate_api_user!,   only: [:create, :update, :destroy]
   before_action :set_review,               only: [:show, :update, :destroy]
-  before_action :only_customer_own_review, only: [:update, :destroy]
+  before_action :only_owner_or_manager,    only: [:update, :destroy]
 
   api! 'List all reviews'
   def index
@@ -29,7 +29,7 @@ class Api::Vi::ReviewsController < ApplicationController
   def create
     review = Review.new(review_params)
     review.user_id = current_api_user.id
-    if product.save
+    if review.save
       review.add_images(review_params[:image_ids])
       render json: review, status: 201, location: [:api, review]
     else
@@ -63,7 +63,7 @@ class Api::Vi::ReviewsController < ApplicationController
       params.fetch(:review, {}).permit(:title, :body, :rating, :product_id, image_ids: [])
     end
 
-    def only_customer_own_review
+    def only_owner_or_manager
       access_denied unless current_api_user.manager? || @review.user_id == current_api_user.id
     end
 
