@@ -48,13 +48,8 @@ class Product < ActiveRecord::Base
 
 
   include Fetchable
+  include Imageable
 
-  def add_images(image_ids = [])
-    Image.find(image_ids).each do |image|
-      image.imageable_id = self.id
-      image.save
-    end
-  end
 
   def update_rating
     update_attributes(rating: (reviews.average('rating') || 0.0) )

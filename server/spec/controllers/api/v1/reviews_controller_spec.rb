@@ -50,7 +50,6 @@ RSpec.describe Api::V1::ReviewsController, type: :controller do
 
     context 'when review is successfully created ' do
       it 'returns the review record' do
-        p json_response
         review_response = json_response[:review]
         expect(review_response[:id]).to be_present
         expect(review_response[:rating]).to eql @review_attr[:rating]

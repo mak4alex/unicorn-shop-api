@@ -15,6 +15,7 @@ class Review < ActiveRecord::Base
   end
 
   include Fetchable
+  include Imageable
 
   scope :search_by_title, lambda { |key| where('lower(title) LIKE ?', "%#{key.downcase}%") if key }
   scope :search_by_body, lambda { |key| where('lower(body) LIKE ?', "%#{key.downcase}%") if key }
@@ -35,11 +36,6 @@ class Review < ActiveRecord::Base
               .below_or_equal_to_rating(params[:max_rating])
         end)
 
-  def add_images(image_ids = [])
-    Image.where(id: image_ids).find_each do |image|
-      image.imageable_id = self.id
-      image.save
-    end
-  end
+
 
 end
