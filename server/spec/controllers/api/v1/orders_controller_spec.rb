@@ -10,13 +10,7 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
         get :index
       end
 
-      it 'renders errors json with description' do
-        order_response = json_response
-        expect(order_response).to have_key(:errors)
-        expect(order_response[:errors]).to include 'Authorized users only.'
-      end
-
-      it { should respond_with 401 }
+      it_behaves_like 'not authenticate'
     end
 
     context 'when authorised as manager' do
@@ -31,7 +25,7 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
         expect(orders_response).to have_exactly(5).items
       end
 
-      it_behaves_like 'paginated list'
+      it_behaves_like 'with meta data'
 
       it { should respond_with 200 }
 
@@ -104,13 +98,7 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
           get :show, id: @bob_order.id
         end
 
-        it 'renders the json errors on why the order could not be showed' do
-          order_response = json_response
-          expect(order_response[:errors]).to include 'Error 403 Access Denied/Forbidden.'
-        end
-
-        it { should respond_with 403 }
-
+        it_behaves_like 'access forbidden'
       end
 
     end

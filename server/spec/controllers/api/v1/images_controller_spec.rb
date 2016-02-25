@@ -9,8 +9,8 @@ RSpec.describe Api::V1::ImagesController, type: :controller do
     end
 
     it 'returns 5 product image records from the database' do
-      products_response = json_response
-      expect(products_response[:images]).to have_at_least(5).items
+      images_response = json_response
+      expect(images_response[:images]).to have_at_least(5).items
     end
 
     it { should respond_with 200 }
@@ -23,8 +23,8 @@ RSpec.describe Api::V1::ImagesController, type: :controller do
     end
 
     it 'returns the information about a image on a hash' do
-      product_response = json_response[:image]
-      expect(product_response[:image]).to eql @image.file.url
+      image_response = json_response[:image]
+      expect(image_response[:image]).to eql @image.file.url
     end
 
     it { should respond_with 200 }
@@ -91,21 +91,14 @@ RSpec.describe Api::V1::ImagesController, type: :controller do
         end
 
         it { should respond_with 204 }
-
       end
 
-      context 'when category does not exist' do
+      context 'when image does not exist' do
         before(:each) do
           delete :destroy, { id: 0 }
         end
 
-        it 'renders the json errors on why the image could not be destroyed' do
-          image_response = json_response
-          expect(image_response[:errors]).to include 'Resource not found.'
-        end
-
-        it { should respond_with 404 }
-
+        it_behaves_like 'data does not exist'
       end
 
     end
@@ -113,16 +106,10 @@ RSpec.describe Api::V1::ImagesController, type: :controller do
     context 'when user not authenticate' do
       before(:each) do
         @image = create :product_image
-        delete :destroy, { id: @image.id}
+        delete :destroy, { id: @image.id }
       end
 
-      it 'renders the json errors on why the image could not be destroyed' do
-        category_response = json_response
-        expect(category_response[:errors]).to include 'Authorized users only.'
-      end
-
-      it { should respond_with 401 }
-
+      it_behaves_like 'not authenticate'
     end
 
   end
