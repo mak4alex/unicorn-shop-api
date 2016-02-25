@@ -6,6 +6,8 @@ class Product < ActiveRecord::Base
   has_many :images, as: :imageable
   has_many :line_items
   has_many :orders, through: :line_items
+  has_many :favourites
+  has_many :fans, through: :favourites, source: :user
 
   validates :title, presence: true, uniqueness: { case_sensitive: false },
             length: { minimum: 3, maximum: 64 }

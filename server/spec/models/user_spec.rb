@@ -33,6 +33,8 @@ describe User do
   it { should_not be_manager }
 
   it { should have_many(:orders) }
+  it { should have_many(:favourites) }
+  it { should have_many(:favourite_products) }
 
   context 'manager role' do
     subject { manager }

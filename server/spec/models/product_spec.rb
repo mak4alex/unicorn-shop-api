@@ -22,6 +22,8 @@ RSpec.describe Product, type: :model do
   it { should have_many(:images) }
   it { should have_many(:line_items) }
   it { should have_many(:orders).through(:line_items) }
+  it { should have_many(:favourites) }
+  it { should have_many(:fans).through(:favourites)  }
 
   it { should_not be_published }
 

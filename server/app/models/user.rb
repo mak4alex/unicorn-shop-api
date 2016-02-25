@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
   end
 
   has_many :orders
+  has_many :favourites
+  has_many :favourite_products, through: :favourites, source: :product
 
   validates :email, presence: true, uniqueness: true
   validates_format_of :email, with: Devise::email_regexp
