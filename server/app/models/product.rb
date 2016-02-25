@@ -8,6 +8,7 @@ class Product < ActiveRecord::Base
   has_many :orders, through: :line_items
   has_many :favourites
   has_many :fans, through: :favourites, source: :user
+  has_many :reviews
 
   validates :title, presence: true, uniqueness: { case_sensitive: false },
             length: { minimum: 3, maximum: 64 }
@@ -53,6 +54,10 @@ class Product < ActiveRecord::Base
       image.imageable_id = self.id
       image.save
     end
+  end
+
+  def update_rating
+    update_attributes(rating: (reviews.average('rating') || 0.0) )
   end
 
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160225095940) do
+ActiveRecord::Schema.define(version: 20160225132449) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "title"
@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 20160225095940) do
     t.integer  "quantity",                            default: 0
     t.decimal  "weight",      precision: 6, scale: 3, default: 0.0
     t.integer  "discount_id"
+    t.decimal  "rating",      precision: 4, scale: 2
   end
 
   add_index "products", ["category_id"], name: "index_products_on_category_id"

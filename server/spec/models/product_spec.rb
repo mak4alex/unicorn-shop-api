@@ -70,4 +70,29 @@ RSpec.describe Product, type: :model do
 
   end
 
+  describe '# update_rating' do
+    before(:each) do
+      @product = create :product
+    end
+
+    it 'set rating to 0.0 by default' do
+      expect(@product.rating.to_f).to eql 0.0
+    end
+
+    it 'set rating average by reviews' do
+      @user = create :user
+      @another_user = create :user
+
+      create :review, user: @user, product: @product, rating: 8
+      expect(@product.rating.to_f).to eql 8.0
+
+      review = create :review, user: @another_user, product: @product, rating: 10
+      expect(@product.rating.to_f).to eql 9.0
+
+      review.update_attributes(rating: 2)
+      expect(@product.rating.to_f).to eql 5.0
+    end
+
+  end
+
 end

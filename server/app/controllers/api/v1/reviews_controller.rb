@@ -18,6 +18,7 @@ class Api::Vi::ReviewsController < ApplicationController
     param :product, Hash, required: true, action_aware: true do
       param :title, String
       param :body, String
+      param :rating, String, required: true
       param :product_id, String, required: true
       param :image_ids, String
     end
