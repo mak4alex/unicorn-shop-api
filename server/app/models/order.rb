@@ -1,6 +1,9 @@
 class Order < ActiveRecord::Base
+
   belongs_to :user
+
   has_one :contact
+
   has_many :line_items
   has_many :products, through: :line_items
 
@@ -13,11 +16,14 @@ class Order < ActiveRecord::Base
   validates :pay_type, presence: true, inclusion: { in: PAY_TYPES }
   validates :delivery_type, presence: true, inclusion: { in: DELIVERY_TYPES }
   validates :contact, presence: true
+  validates_associated :contact
   validates :line_items, presence: true
+  validates :comment, length: { maximum: 255 }
   validate :total_sum_set_correctly
 
-
   before_validation :set_initial_status
+
+  include Fetchable
 
 
   def set_initial_status
@@ -39,6 +45,7 @@ class Order < ActiveRecord::Base
   def self.make_order(params, user)
     order = Order.new(total: params[:total], user_id: user.id, pay_type: params[:pay_type], delivery_type: params[:delivery_type])
     params[:line_items].each { |line_item| order.line_items.build(line_item) }
+    order.build_contact(params[:contact])
     order
   end
 

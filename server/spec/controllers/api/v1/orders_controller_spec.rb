@@ -25,7 +25,6 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
         expect(orders_response).to have_exactly(5).items
       end
 
-      it_behaves_like 'with meta data'
 
       it { should respond_with 200 }
 
@@ -113,14 +112,16 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
       @product_1 = create :product, price: 100
       @product_2 = create :product, price: 200
 
+      @contact = attributes_for :contact
+
       @line_item_1 = attributes_for :line_item, product_id: @product_1.id, quantity: 2
       @line_item_2 = attributes_for :line_item, product_id: @product_2.id, quantity: 5
-
     end
 
     context 'when total is correct' do
       before(:each) do
-        order_params = { total: 1200, pay_type: 'cash', delivery_type: 'mail', line_items: [@line_item_1, @line_item_2] }
+        order_params = { total: 1200, pay_type: 'cash', delivery_type: 'mail',
+                         contact: @contact, line_items: [@line_item_1, @line_item_2] }
         post :create, order: order_params
       end
 
@@ -129,9 +130,28 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
         expect(order_response[:id]).to be_present
         expect(order_response[:total]).to eql '1200.0'
         expect(order_response[:products]).to have_exactly(2).items
+        expect(order_response).to have_key(:contact)
+        expect(order_response[:contact][:order_id]).to eql order_response[:id]
+        expect(order_response[:contact][:email]).to eql @contact[:email]
       end
 
       it { should respond_with 201 }
+
+    end
+
+    context 'when contact is incorrect' do
+      before(:each) do
+        @contact[:email] = nil
+        order_params = { total: 1200, pay_type: 'cash', delivery_type: 'mail',
+                         contact: @contact, line_items: [@line_item_1, @line_item_2] }
+        post :create, order: order_params
+      end
+
+      it 'returns the error why order record not created' do
+        expect(json_response[:errors][:contact]).to include 'is invalid'
+      end
+
+      it { should respond_with 422 }
 
     end
 

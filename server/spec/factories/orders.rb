@@ -4,6 +4,7 @@ FactoryGirl.define do
     total 100
     pay_type 'cash'
     delivery_type 'mail'
+    comment 'Some additional info here'
     user
 
     after(:build) do |order|
