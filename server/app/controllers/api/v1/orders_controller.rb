@@ -27,7 +27,18 @@ class Api::V1::OrdersController < ApplicationController
     end
   end
 
+  def update
+    if @order.update(order_params)
+      render json: @order, status: 200, location: [:api, @order]
+    else
+      render json: { errors: @order.errors }, status: 422
+    end
+  end
 
+  def destroy
+    @order.destroy
+    head 204
+  end
 
   private
 
@@ -36,7 +47,7 @@ class Api::V1::OrdersController < ApplicationController
     end
 
     def order_params
-      params.fetch(:order, {}).permit( :total, :pay_type, :delivery_type, :comment,
+      params.fetch(:order, {}).permit( :total, :pay_type, :delivery_type, :comment, :status,
                                        contact: [ :email, :name, :phone, :country, :city, :address ],
                                        line_items: [:product_id, :quantity])
     end

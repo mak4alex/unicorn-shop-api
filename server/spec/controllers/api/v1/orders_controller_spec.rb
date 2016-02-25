@@ -171,4 +171,52 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
 
   end
 
+  describe 'PUT/PATCH #update' do
+    before(:each) do
+      auth_request (create :user, :manager)
+      @order = create :order
+    end
+
+    context 'when is successfully updated' do
+      before(:each) do
+        patch :update, { id: @order.id, order: { status: 'done' } }
+      end
+
+      it 'renders the json representation for the updated order' do
+        product_response = json_response[:order]
+        expect(product_response[:status]).to eql 'done'
+      end
+
+      it { should respond_with 200 }
+    end
+
+    context 'when is not updated' do
+      before(:each) do
+        patch :update, { id: @order.id, order: { status: 'ololo'} }
+      end
+
+      it 'renders the json errors on why the order could not be updated' do
+        product_response = json_response
+        expect(product_response).to have_key(:errors)
+        expect(product_response[:errors][:status]).to include 'is not included in the list'
+      end
+
+      it { should respond_with 422 }
+    end
+  end
+
+  describe 'DELETE #destroy' do
+
+    context 'when is successfully destroy' do
+      before(:each) do
+        auth_request create(:user, :manager)
+        order = create :order
+        delete :destroy, { id: order.id }
+      end
+
+      it { should respond_with 204 }
+    end
+
+  end
+
 end
