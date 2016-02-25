@@ -56,13 +56,15 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
         context 'when is successfully created' do
           before(:each) do
-            @product_attributes = attributes_for :product, category_id: 1, published: ''
+            @product_attributes = attributes_for :product, category_id: 1, published: '', image_ids: []
+            2.times { @product_attributes[:image_ids].push (create :product_image).id }
             post :create, { product: @product_attributes }
           end
 
           it 'renders the json representation for the product record just created' do
             product_response = json_response[:product]
             expect(product_response[:title]).to eql @product_attributes[:title]
+            expect(product_response[:images]).to have_exactly(2).items
           end
 
           it { should respond_with 201 }

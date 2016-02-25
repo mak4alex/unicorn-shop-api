@@ -6,7 +6,7 @@ class Api::V1::ProductsController < ApplicationController
 
   api! 'List all products'
   def index
-    products = Product.fetch(params)
+    products = Product.search(params).fetch(params)
     render json: { products: products, meta: get_meta(products, params) }
   end
 
@@ -23,17 +23,19 @@ class Api::V1::ProductsController < ApplicationController
       param :count, String
       param :published, String
       param :category_id, String, required: true
+      param :image_ids, String
     end
   end
 
   api! 'Create product'
   param_group :product
   def create
-    @product = Product.new(product_params)
-    if @product.save
-      render json: @product, status: 201, location: [:api, @product]
+    product = Product.new(product_params)
+    if product.save
+      product.add_images(product_params[:image_ids])
+      render json: product, status: 201, location: [:api, product]
     else
-      render json: { errors: @product.errors }, status: 422
+      render json: { errors: product.errors }, status: 422
     end
   end
 
@@ -61,7 +63,7 @@ class Api::V1::ProductsController < ApplicationController
 
     def product_params
       params.fetch(:product, {}).permit( :title, :description, :price,
-                                       :quantity, :published, :category_id, :weight)
+                                       :quantity, :published, :category_id, :weight, image_ids: [])
     end
 
 end

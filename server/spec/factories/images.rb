@@ -8,7 +8,7 @@ FactoryGirl.define do
     end
 
     factory :review_image do
-      association :imageable, factory: :review
+      imageable_type 'Review'
     end
 
   end
