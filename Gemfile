@@ -6,8 +6,6 @@ gem 'rails', '4.2.5.1'
 gem 'active_model_serializers', '~> 0.9.4'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -36,8 +34,8 @@ end
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  # Use sqlite3 as the database for Active Record
-  gem 'sqlite3'
+  # Use mysql as the database for Active Record
+  gem 'mysql2', '>= 0.3.13', '< 0.5'
   gem 'rspec-rails', '~> 3.4', '>= 3.4.2'
   gem 'factory_girl_rails', '~> 4.6'
   gem 'ffaker', '~> 2.2'
