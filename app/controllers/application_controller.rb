@@ -2,6 +2,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   include DeviseTokenAuth::Concerns::SetUserByToken
 
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
+
   rescue_from ActiveRecord::RecordNotFound,  with: :not_found
 
   def welcome
@@ -53,6 +56,12 @@ class ApplicationController < ActionController::Base
         per_page: params[:per_page].to_i,
         total_pages: paginated_array.total_pages,
         total_objects: paginated_array.total_count }
+    end
+
+    def configure_permitted_parameters
+      devise_parameter_sanitizer
+          .for(:sign_up) << [:name, :sex, :phone, :country,
+                             :city, :address, :birthday]
     end
 
 end
