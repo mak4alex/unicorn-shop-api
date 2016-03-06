@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160306104126) do
+ActiveRecord::Schema.define(version: 20160306105124) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "title",              limit: 255
@@ -56,6 +56,16 @@ ActiveRecord::Schema.define(version: 20160306104126) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+
+  create_table "discounts", force: :cascade do |t|
+    t.decimal  "initial_sum",           precision: 9, scale: 2
+    t.decimal  "percent",               precision: 4, scale: 2
+    t.integer  "shop_id",     limit: 4
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+  end
+
+  add_index "discounts", ["shop_id"], name: "index_discounts_on_shop_id", using: :btree
 
   create_table "distributions", force: :cascade do |t|
     t.string   "title",      limit: 255
@@ -193,6 +203,7 @@ ActiveRecord::Schema.define(version: 20160306104126) do
 
   add_foreign_key "categories", "shops"
   add_foreign_key "contacts", "orders"
+  add_foreign_key "discounts", "shops"
   add_foreign_key "distributions", "shops"
   add_foreign_key "favourites", "products"
   add_foreign_key "favourites", "users"

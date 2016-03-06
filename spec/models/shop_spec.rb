@@ -12,7 +12,7 @@ RSpec.describe Shop, type: :model do
   it { should validate_uniqueness_of(:title).case_insensitive }
   it { should validate_uniqueness_of(:register_number).case_insensitive }
 
-  it { should validate_length_of(:title)          .is_at_least(3).is_at_most(32) }
+
   it { should validate_length_of(:register_number).is_at_least(8).is_at_most(32) }
 
   it { should have_many(:discounts) }
