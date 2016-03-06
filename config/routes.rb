@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       resources :images,     only: [:index, :show, :create, :update, :destroy]
       resources :orders,     only: [:index, :show, :create, :update, :destroy]
       resources :reviews,    only: [:index, :show, :create, :update, :destroy]
-      resources :discounts,  only: [:index, :show, :create, :update, :destroy] do
+      resources :stocks,     only: [:index, :show, :create, :update, :destroy] do
         get 'products', on: :member
         get 'count',    on: :collection
       end

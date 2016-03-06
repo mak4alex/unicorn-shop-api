@@ -1,7 +1,7 @@
 class Product < ActiveRecord::Base
 
   belongs_to :category
-  belongs_to :discount
+  belongs_to :stock
 
   has_many :images, as: :imageable
   has_many :line_items

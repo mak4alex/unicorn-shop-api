@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160306091310) do
+ActiveRecord::Schema.define(version: 20160306093508) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "title",              limit: 255
@@ -54,13 +54,6 @@ ActiveRecord::Schema.define(version: 20160306091310) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
-
-  create_table "discounts", force: :cascade do |t|
-    t.string   "title",      limit: 255
-    t.integer  "percent",    limit: 4
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
 
   create_table "favourites", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -117,12 +110,12 @@ ActiveRecord::Schema.define(version: 20160306091310) do
     t.datetime "updated_at",                                                      null: false
     t.integer  "quantity",    limit: 4,                             default: 0
     t.decimal  "weight",                    precision: 6, scale: 3, default: 0.0
-    t.integer  "discount_id", limit: 4
+    t.integer  "stock_id",    limit: 4
     t.decimal  "rating",                    precision: 4, scale: 2
   end
 
   add_index "products", ["category_id"], name: "index_products_on_category_id", using: :btree
-  add_index "products", ["discount_id"], name: "index_products_on_discount_id", using: :btree
+  add_index "products", ["stock_id"], name: "index_products_on_stock_id", using: :btree
   add_index "products", ["title"], name: "index_products_on_title", unique: true, using: :btree
 
   create_table "reviews", force: :cascade do |t|
@@ -147,6 +140,13 @@ ActiveRecord::Schema.define(version: 20160306091310) do
 
   add_index "shops", ["register_number"], name: "index_shops_on_register_number", unique: true, using: :btree
   add_index "shops", ["title"], name: "index_shops_on_title", unique: true, using: :btree
+
+  create_table "stocks", force: :cascade do |t|
+    t.string   "title",      limit: 255
+    t.integer  "percent",    limit: 4
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                       limit: 255,   default: "",         null: false
@@ -182,7 +182,7 @@ ActiveRecord::Schema.define(version: 20160306091310) do
   add_foreign_key "contacts", "orders"
   add_foreign_key "favourites", "products"
   add_foreign_key "favourites", "users"
-  add_foreign_key "products", "discounts"
+  add_foreign_key "products", "stocks"
   add_foreign_key "reviews", "products"
   add_foreign_key "reviews", "users"
 end
