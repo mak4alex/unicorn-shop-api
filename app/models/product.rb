@@ -13,7 +13,7 @@ class Product < ActiveRecord::Base
   validates :title, presence: true, uniqueness: { case_sensitive: false },
             length: { minimum: 3, maximum: 64 }
   validates :description, presence: true, length: { minimum: 16 }
-  validates :quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :quantity, numericality: { only_integer: true }
   validates :price, presence: true, numericality: { greater_than: 0.0 }
   validates :category_id, presence: true
   validates :weight, presence: true
@@ -50,6 +50,10 @@ class Product < ActiveRecord::Base
   include Fetchable
   include Imageable
 
+  def decrease_quantity_by (count)
+    self.quantity -= count
+    save
+  end
 
   def update_rating
     update_attributes(rating: (reviews.average('rating') || 0.0) )

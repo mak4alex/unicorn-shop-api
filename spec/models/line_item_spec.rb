@@ -16,4 +16,12 @@ RSpec.describe LineItem, type: :model do
 
   it { should validate_numericality_of(:quantity).only_integer.is_greater_than_or_equal_to(1) }
 
+
+  it 'should decrease product quantity when created' do
+    product = create :product, quantity: 20
+    line_item = create :line_item, product: product, quantity: 10
+
+    expect(product.quantity).to eq 10
+  end
+
 end
