@@ -14,6 +14,7 @@ RSpec.describe Category, type: :model do
   it { should respond_to(:description) }
 
   it { should belong_to(:parent) }
+  it { should belong_to(:shop) }
 
   it { should have_many(:subcategories) }
   it { should have_many(:products) }

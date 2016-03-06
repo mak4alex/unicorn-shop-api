@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160306102439) do
+ActiveRecord::Schema.define(version: 20160306104126) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "title",              limit: 255
@@ -19,9 +19,11 @@ ActiveRecord::Schema.define(version: 20160306102439) do
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
     t.integer  "parent_category_id", limit: 4
+    t.integer  "shop_id",            limit: 4
   end
 
   add_index "categories", ["parent_category_id"], name: "index_categories_on_parent_category_id", using: :btree
+  add_index "categories", ["shop_id"], name: "index_categories_on_shop_id", using: :btree
   add_index "categories", ["title"], name: "index_categories_on_title", unique: true, using: :btree
 
   create_table "contacts", force: :cascade do |t|
@@ -189,6 +191,7 @@ ActiveRecord::Schema.define(version: 20160306102439) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["uid"], name: "index_users_on_uid", unique: true, using: :btree
 
+  add_foreign_key "categories", "shops"
   add_foreign_key "contacts", "orders"
   add_foreign_key "distributions", "shops"
   add_foreign_key "favourites", "products"

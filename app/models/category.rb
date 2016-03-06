@@ -2,6 +2,7 @@ class Category < ActiveRecord::Base
   has_many   :subcategories, class_name: 'Category', foreign_key: 'parent_category_id'
   has_many   :products
 
+  belongs_to :shop
   belongs_to :parent,        class_name: 'Category', foreign_key: 'parent_category_id'
 
 
