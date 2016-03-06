@@ -5,6 +5,7 @@ RSpec.describe Category, type: :model do
   subject { category }
 
   it { should validate_presence_of :title }
+  it { should validate_presence_of :shop }
 
   it { should validate_uniqueness_of(:title).case_insensitive }
 

@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :category do
     sequence(:title) { |n| "Category ##{n}" }
     description { FFaker::Lorem.sentence }
-
+    shop
 
     factory :category_with_subcategories do
 
