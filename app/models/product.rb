@@ -59,4 +59,13 @@ class Product < ActiveRecord::Base
     update_attributes(rating: (reviews.average('rating') || 0.0) )
   end
 
+  def self.sales_stat(params = {})
+    params[:sort] ||= 'sales_count desc'
+    Product
+        .joins(:line_items)
+        .group('products.id')
+        .fetch(params)
+        .pluck_h('products.id as id', 'title', 'sum(line_items.quantity) as sales_count')
+  end
+
 end
