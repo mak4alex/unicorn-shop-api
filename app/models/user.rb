@@ -6,10 +6,13 @@ class User < ActiveRecord::Base
          :recoverable, :trackable, :validatable
 
   include DeviseTokenAuth::Concerns::User
+  include Fetchable
 
 
   SEXES = %w(male female)
   ROLES = %w(guest customer manager)
+
+  attr_accessor :total
 
   before_validation do
     self.uid = email if uid.blank?
@@ -27,6 +30,14 @@ class User < ActiveRecord::Base
 
   def manager?
     self.role == 'manager'
+  end
+
+  def self.sales_stat(params = {})
+    params[:sort] ||= 'total_sales desc'
+    User.joins(:orders)
+        .group('users.id')
+        .fetch(params)
+        .pluck_h('users.id as id', 'name', 'email', 'sum(orders.total) as total_sales')
   end
 
 end

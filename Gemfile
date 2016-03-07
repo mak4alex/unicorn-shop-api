@@ -23,8 +23,10 @@ gem 'fog', '~> 1.37'
 gem 'kaminari', '~> 0.16.3'
 # ActiveRecord backend for Delayed::Job, originally authored by Tobias Lütke
 gem 'delayed_job_active_record', '~> 4.1'
-
+# Ffaker generates dummy data.
 gem 'ffaker', '~> 2.2'
+# Extend ActiveRecord pluck to return hash instead of an array. Useful when plucking multiple columns.
+gem 'pluck_to_hash', '~> 0.1.3'
 
 group :production do
   gem 'pg', '~> 0.18.4'
