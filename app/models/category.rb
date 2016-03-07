@@ -13,4 +13,12 @@ class Category < ActiveRecord::Base
 
   include Fetchable
 
+
+  scope :most_popular, -> do
+    select('categories.*, sum(line_items.quantity) as popularity')
+        .joins(products: [:line_items])
+        .group('categories.id')
+        .order('popularity desc')
+  end
+
 end
