@@ -30,6 +30,8 @@ describe User do
 
   it { should allow_value('example@domain.com').for(:email) }
 
+  it { should validate_inclusion_of(:sex).in_array(User::SEXES) }
+
   it { should_not be_manager }
 
   it { should have_many(:orders) }
@@ -38,9 +40,7 @@ describe User do
 
   context 'manager role' do
     subject { manager }
-
     it { should be_manager }
-
   end
 
 end

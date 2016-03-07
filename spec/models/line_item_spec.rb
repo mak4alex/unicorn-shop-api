@@ -20,7 +20,6 @@ RSpec.describe LineItem, type: :model do
   it 'should decrease product quantity when created' do
     product = create :product, quantity: 20
     line_item = create :line_item, product: product, quantity: 10
-
     expect(product.quantity).to eq 10
   end
 

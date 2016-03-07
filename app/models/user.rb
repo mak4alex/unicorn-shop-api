@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
 
   include DeviseTokenAuth::Concerns::User
 
+
+  SEXES = %w(male female)
   ROLES = %w(guest customer manager)
 
   before_validation do
@@ -20,6 +22,8 @@ class User < ActiveRecord::Base
   validates :email, presence: true, uniqueness: true
   validates_format_of :email, with: Devise::email_regexp
   validates :role, presence: true, inclusion: { in: ROLES }
+  validates :sex, inclusion: { in: SEXES }, unless: 'sex.nil?'
+
 
   def manager?
     self.role == 'manager'

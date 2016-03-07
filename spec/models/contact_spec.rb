@@ -9,7 +9,6 @@ RSpec.describe Contact, type: :model do
 
   it { should belong_to(:order) }
 
-  it { should validate_presence_of(:order) }
   it { should validate_presence_of(:email) }
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:phone) }

@@ -24,6 +24,8 @@ gem 'kaminari', '~> 0.16.3'
 # ActiveRecord backend for Delayed::Job, originally authored by Tobias Lütke
 gem 'delayed_job_active_record', '~> 4.1'
 
+gem 'ffaker', '~> 2.2'
+
 group :production do
   gem 'pg', '~> 0.18.4'
   gem 'rails_12factor', '~> 0.0.3'
@@ -38,7 +40,6 @@ group :development, :test do
   gem 'mysql2', '>= 0.3.13', '< 0.5'
   gem 'rspec-rails', '~> 3.4', '>= 3.4.2'
   gem 'factory_girl_rails', '~> 4.6'
-  gem 'ffaker', '~> 2.2'
 end
 
 group :development do

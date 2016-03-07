@@ -9,7 +9,7 @@ class Category < ActiveRecord::Base
   validates :title, presence: true, uniqueness: { case_sensitive: false },
                                     length: { minimum: 3, maximum: 32 }
   validates :description, length: { minimum: 16, maximum: 255 }
-  validates :shop, presence: true
+  validates :shop, presence: true, if: 'parent_category_id.nil?'
 
   include Fetchable
 
