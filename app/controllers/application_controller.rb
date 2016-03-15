@@ -3,7 +3,16 @@ class ApplicationController < ActionController::Base
   include DeviseTokenAuth::Concerns::SetUserByToken
 
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :cors_set_access_control_headers
 
+  def cors_set_access_control_headers
+    headers['Access-Control-Allow-Credentials'] = 'true'
+    headers['Access-Control-Max-Age'] = '1000'
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS, HEAD'
+    headers['Access-Control-Request-Method'] = '*'
+    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Client-Security-Token, Accept-Encoding'
+  end
 
   rescue_from ActiveRecord::RecordNotFound,  with: :not_found
 

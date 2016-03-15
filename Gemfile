@@ -28,6 +28,8 @@ gem 'ffaker', '~> 2.2'
 # Extend ActiveRecord pluck to return hash instead of an array. Useful when plucking multiple columns.
 gem 'pluck_to_hash', '~> 0.1.3'
 
+gem 'rack-cors', :require => 'rack/cors'
+
 group :production do
   gem 'pg', '~> 0.18.4'
   gem 'rails_12factor', '~> 0.0.3'
