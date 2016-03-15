@@ -1,11 +1,12 @@
 class Api::V1::CategoriesController < ApplicationController
   before_action :authenticate_api_user!, only: [:create, :update, :destroy]
   before_action :manager_only!,          only: [:create, :update, :destroy]
-  before_action :set_category,           only: [:show, :update, :destroy, :products]
+  before_action :set_category,           only: [:show, :update, :destroy,
+                                                :products, :subcategories]
 
-  api! 'List all categories'
+  api! 'List all parent categories'
   def index
-    categories = Category.fetch(params)
+    categories = Category.parent_categories.fetch(params)
     render json: categories, meta: get_meta(categories, params)
   end
 
@@ -19,6 +20,12 @@ class Api::V1::CategoriesController < ApplicationController
     render json: @category
   end
 
+  api! 'Show subcategories of category with id'
+  def subcategories
+    categories = @category.subcategories.fetch(params)
+    render json: categories, meta: get_meta(categories, params)
+  end
+
   api! 'List products on category'
   def products
     products = @category.products.fetch(params)
@@ -30,6 +37,7 @@ class Api::V1::CategoriesController < ApplicationController
       param :title, String, required: true
       param :description, String, required: true
       param :parent_category_id, String
+      param :shop_id, String, desc: 'Only for top level categories'
     end
   end
 
@@ -67,7 +75,7 @@ class Api::V1::CategoriesController < ApplicationController
     end
 
     def category_params
-      params.fetch(:category, {}).permit( :title, :description, :parent_category_id )
+      params.fetch(:category, {}).permit( :title, :description, :shop_id, :parent_category_id )
     end
 
 end

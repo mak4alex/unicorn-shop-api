@@ -33,6 +33,22 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
     it { should respond_with 200 }
   end
 
+  describe 'GET #subcategories' do
+    before(:each) do
+      category = create :category_with_subcategories, count: 5
+      get :subcategories, id: category.id, sort: 'title desc', page: 1
+    end
+
+    it 'returns subcategories from category' do
+      categories_response = json_response[:categories]
+      expect(categories_response).to have_exactly(5).items
+    end
+
+    it_behaves_like 'with meta data'
+
+    it { should respond_with 200 }
+  end
+
   describe 'GET #products' do
     before(:each) do
       category = create :category_with_products, count: 5
@@ -82,6 +98,7 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
 
 
   describe 'POST #create' do
+    let(:shop) { create :shop }
 
     context 'when user authenticate' do
       before(:each) do
@@ -91,7 +108,7 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
 
       context 'when is successfully created' do
         before(:each) do
-          @category_attributes = attributes_for :category
+          @category_attributes = attributes_for :category, shop_id: shop.id
           post :create, { category: @category_attributes }
         end
 
