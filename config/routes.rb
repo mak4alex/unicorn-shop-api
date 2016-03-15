@@ -8,8 +8,9 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'User', at: 'auth'
       resources :users,      only: [:index, :show, :create, :update, :destroy]
       resources :categories, only: [:index, :show, :create, :update, :destroy] do
-        get 'products', on: :member
-        get 'count',    on: :collection
+        get 'products',      on: :member
+        get 'subcategories', on: :member
+        get 'count',         on: :collection
       end
       resources :products,   only: [:index, :show, :create, :update, :destroy]
       resources :images,     only: [:index, :show, :create, :update, :destroy]
