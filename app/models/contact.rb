@@ -8,4 +8,11 @@ class Contact < ActiveRecord::Base
   validates :city, presence: true
   validates :address, presence: true
 
+  def self.sales_stat(params = {})
+    params[:sort] ||= 'total_sales desc'
+    User.joins(:order)
+        .group('email')
+        .fetch(params)
+        .pluck_h('name', 'email', 'sum(orders.total) as total_sales')
+  end
 end
