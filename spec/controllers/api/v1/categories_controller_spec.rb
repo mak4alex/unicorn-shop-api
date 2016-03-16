@@ -77,9 +77,7 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
         category_response = json_response[:category]
         expect(category_response[:title]).to eql @category.title
         expect(category_response[:description]).to eql @category.description
-        expect(category_response).to have_key(:product_ids)
         expect(category_response).to have_key(:parent_category_id)
-        expect(category_response).to have_key(:subcategory_ids)
       end
 
       it { should respond_with 200 }
@@ -102,8 +100,8 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
 
     context 'when user authenticate' do
       before(:each) do
-        @manager = create :user, :manager
-        auth_request @manager
+        @admin = create :admin
+        auth_request @admin
       end
 
       context 'when is successfully created' do
@@ -156,8 +154,8 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
 
     context 'when user authenticate' do
       before(:each) do
-        @manager = create :user, :manager
-        auth_request @manager
+        @admin = create :admin
+        auth_request @admin
       end
 
       context 'when is successfully updated' do
@@ -214,14 +212,14 @@ RSpec.describe Api::V1::CategoriesController, type: :controller do
           delete :destroy, { id: @category.id }
         end
 
-        it_behaves_like 'access forbidden'
+        it_behaves_like 'not authenticate'
 
       end
 
-      context 'as manager' do
+      context 'as admin' do
         before(:each) do
-          @manager = create :user, :manager
-          auth_request @manager
+          @admin = create :admin
+          auth_request @admin
         end
 
         context 'when category exists' do

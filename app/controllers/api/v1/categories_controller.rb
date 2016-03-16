@@ -1,8 +1,7 @@
 class Api::V1::CategoriesController < ApplicationController
-  before_action :authenticate_api_user!, only: [:create, :update, :destroy]
-  before_action :manager_only!,          only: [:create, :update, :destroy]
-  before_action :set_category,           only: [:show, :update, :destroy,
-                                                :products, :subcategories]
+  before_action :authenticate_api_admin!, only: [:create, :update, :destroy]
+  before_action :set_category,            only: [:show, :update, :destroy,
+                                                 :products, :subcategories]
 
   api! 'List all parent categories'
   def index
