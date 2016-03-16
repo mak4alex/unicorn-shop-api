@@ -20,19 +20,11 @@ end
 end
 
 
-User.create!(
+Admin.create!(
     {
       email: 'manager@example.com',
       password: 'manager@example.com',
-      password_confirmation: 'manager@example.com',
-      role: 'manager',
-      sex: User::SEXES.sample,
-      name: FFaker::NameRU.name,
-      phone: FFaker::PhoneNumber.phone_number,
-      country: FFaker::AddressRU.country,
-      city: FFaker::AddressRU.city,
-      address: FFaker::AddressRU.street_address,
-      birthday: "#{rand(1965..2000)}-01-01"
+      password_confirmation: 'manager@example.com'
     })
 
 1.upto(200) do |n|
