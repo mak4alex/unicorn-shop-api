@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
 
   before_validation do
     self.uid = email if uid.blank?
+    self.provider = 'email' if provider.blank?
   end
 
   has_many :orders

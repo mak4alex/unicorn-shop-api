@@ -8,9 +8,8 @@ gem 'active_model_serializers', '~> 0.9.4'
 gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-
-gem 'devise', '~> 3.5', '>= 3.5.5'
-gem 'devise_token_auth', '~> 0.1.31'
+# Token based authentication for Rails JSON APIs. Designed to work with jToker and ng-token-auth.
+gem 'devise_token_auth', '~> 0.1.37'
 
 gem 'apipie-rails', '~> 0.3.5'
 # Upload files, map them to a range of ORMs, store them on different backends.

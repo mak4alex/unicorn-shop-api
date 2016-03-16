@@ -1,9 +1,11 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :null_session
   include DeviseTokenAuth::Concerns::SetUserByToken
 
+  protect_from_forgery with: :null_session
+
+
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :cors_set_access_control_headers
+  #before_action :cors_set_access_control_headers
 
   def cors_set_access_control_headers
     headers['Access-Control-Allow-Credentials'] = 'true'
@@ -68,9 +70,9 @@ class ApplicationController < ActionController::Base
     end
 
     def configure_permitted_parameters
-      devise_parameter_sanitizer
-          .for(:sign_up) << [:name, :sex, :phone, :country,
-                             :city, :address, :birthday]
+      parameters = [:name, :sex, :phone, :country, :city, :address, :birthday]
+      devise_parameter_sanitizer.for(:sign_up) << parameters
+      devise_parameter_sanitizer.for(:account_update) << parameters
     end
 
 end

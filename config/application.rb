@@ -48,16 +48,19 @@ module MarketPlaceApi
 
     config.autoload_paths += %W(\#{config.root}/lib)
     
-    config.middleware.insert_before "ActionDispatch::Static", "Rack::Cors", :debug => true, :logger => Rails.logger do
-  allow do
-    origins '*'
+    config.middleware.insert_before "ActionDispatch::Static", "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*',
+          :headers => :any,
+          :expose  => ['access-token', 'expiry', 'token-type', 'uid', 'client'],
+          :methods => [:get, :post, :options, :delete, :put]
+      end
+    end
 
-    resource '*',
-      :headers => :any,
-      :methods => [:get, :post, :delete, :put, :options],
-      :max_age => 0
-  end
-end
+    config.action_dispatch.default_headers = {
+      'Access-Control-Expose-Headers' => ['access-token', 'expiry', 'token-type', 'uid', 'client'].join(',')
+    }
 
   end
 end
