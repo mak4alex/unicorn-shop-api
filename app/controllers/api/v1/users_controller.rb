@@ -1,14 +1,16 @@
 class Api::V1::UsersController < ApplicationController
-  respond_to :json
+  before_action :set_user, only: [:show, :update, :destroy]
+  before_action :authenticate_api_admin!
 
   api!
   def index
-    respond_with User.all
+    users = User.fetch(params)
+    render json: users, meta: get_meta(users, params)
   end
 
   api!
   def show
-    respond_with User.find(params[:id])
+    render json: @user
   end
 
   api!
@@ -23,19 +25,16 @@ class Api::V1::UsersController < ApplicationController
 
   api!
   def update
-    user = User.find(params[:id])
-
-    if user.update(user_params)
-      render json: user, status: 200, location: [:api, user]
+    if @user.update(user_params)
+      render json: @user, status: 200, location: [:api, @user]
     else
-      render json: { errors: user.errors }, status: 422
+      render json: { errors: @user.errors }, status: 422
     end
   end
 
   api!
   def destroy
-    user = User.find(params[:id])
-    user.destroy
+    @user.destroy
     head 204
   end
 
@@ -43,6 +42,10 @@ class Api::V1::UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(:email, :password, :password_confirmation)
+    end
+
+    def set_user
+      @user = User.find(params[:id])
     end
 
 end

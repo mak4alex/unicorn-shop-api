@@ -2,6 +2,11 @@ require 'rails_helper'
 
 describe Api::V1::UsersController do
 
+  before(:each) do
+    @admin = create :admin
+    auth_request @admin
+  end
+
   describe 'GET #index' do
     before(:each) do
       5.times { create :user }
@@ -22,8 +27,6 @@ describe Api::V1::UsersController do
 
     context 'when user exists' do
       before(:each) do
-        @manager = create :user, :manager
-        auth_request @manager
         @user = create :user
         get :show, id: @user.id
       end
@@ -45,8 +48,6 @@ describe Api::V1::UsersController do
     end
 
   end
-
-
 
 
   describe 'PUT/PATCH #update' do
@@ -84,6 +85,23 @@ describe Api::V1::UsersController do
       end
 
       it { is_expected.to respond_with 422 }
+    end
+
+  end
+
+  describe 'DELETE #destroy' do
+
+    context 'when authenticate as admin' do
+
+      context 'when category exists' do
+        before(:each) do
+          @user = create :user
+          delete :destroy, { id: @user.id }
+        end
+
+        it { should respond_with 204 }
+      end
+
     end
   end
 
