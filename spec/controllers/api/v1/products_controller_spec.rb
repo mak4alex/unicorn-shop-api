@@ -45,13 +45,13 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
           post :create, { product: @product_attributes }
         end
 
-        it_behaves_like 'access forbidden'
+        it_behaves_like 'not authenticate'
 
       end
 
-      context 'as manager' do
+      context 'as admin' do
         before(:each) do
-          auth_request create(:user, :manager)
+          auth_request create(:admin)
         end
 
         context 'when is successfully created' do
@@ -99,7 +99,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
   describe 'PUT/PATCH #update' do
     before(:each) do
-      auth_request (create :user, :manager)
+      auth_request (create :admin)
       @product = create :product
     end
 
@@ -139,7 +139,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
     context 'when is successfully destroy' do
       before(:each) do
-        auth_request create(:user, :manager)
+        auth_request create(:admin)
         @product = create :product
         delete :destroy, { id: @product.id }
       end
@@ -150,7 +150,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
     context 'when is product not found' do
       before(:each) do
-        auth_request create(:user, :manager)
+        auth_request create(:admin)
         delete :destroy, { id: 0 }
       end
 
