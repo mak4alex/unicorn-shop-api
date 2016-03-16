@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ReviewsController, type: :controller do
-  let(:manager) { create :user, :manager }
   let(:user) { create :user }
   let(:product) { create :product }
 
@@ -98,13 +97,11 @@ RSpec.describe Api::V1::ReviewsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before(:each) do
-      @bob = user
-      auth_request @bob
-    end
 
     context 'when authorized as review owner' do
       before(:each) do
+        @bob = user
+        auth_request @bob
         review = create :review, user: @bob
         delete :destroy, { id: review.id }
       end
@@ -114,6 +111,7 @@ RSpec.describe Api::V1::ReviewsController, type: :controller do
 
     context 'when authorized as other user' do
       before(:each) do
+        auth_request user
         review = create :review
         delete :destroy, { id: review.id }
       end
