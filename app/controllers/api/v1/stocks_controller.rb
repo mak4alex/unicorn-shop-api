@@ -1,7 +1,6 @@
 class Api::V1::StocksController < ApplicationController
-  before_action :authenticate_api_user!, only: [:create, :update, :destroy]
-  before_action :manager_only!,          only: [:create, :update, :destroy]
-  before_action :set_stock,           only: [:show, :update, :destroy, :products]
+  before_action :authenticate_api_admin!, only: [:create, :update, :destroy]
+  before_action :set_stock,               only: [:show, :update, :destroy, :products]
 
   api! 'List all stocks'
   def index
@@ -11,7 +10,7 @@ class Api::V1::StocksController < ApplicationController
 
   api! 'Show count of stocks'
   def count
-    render json: { count: stock.count }
+    render json: { count: Stock.count }
   end
 
   api! 'Show stock with id'
@@ -35,7 +34,7 @@ class Api::V1::StocksController < ApplicationController
   api! 'Create stock'
   param_group :stock
   def create
-    @stock = stock.new(stock_params)
+    @stock = Stock.new(stock_params)
     if @stock.save
       render json: @stock, status: 201, location: [:api, @stock]
     else
@@ -62,7 +61,7 @@ class Api::V1::StocksController < ApplicationController
   private
 
     def set_stock
-      @stock = stock.find(params[:id])
+      @stock = Stock.find(params[:id])
     end
 
     def stock_params

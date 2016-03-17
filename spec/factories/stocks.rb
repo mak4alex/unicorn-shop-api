@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :stock do
-    title 'Holiday'
+    sequence(:title) { |n| "Stock ##{n}" }
     percent 3
 
     factory :stock_with_products do

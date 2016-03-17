@@ -83,8 +83,8 @@ RSpec.describe Api::V1::StocksController, type: :controller do
 
     context 'when user authenticate' do
       before(:each) do
-        @manager = create :user, :manager
-        auth_request @manager
+        @admin = create :admin
+        auth_request @admin
       end
 
       context 'when is successfully created' do
@@ -137,8 +137,8 @@ RSpec.describe Api::V1::StocksController, type: :controller do
 
     context 'when user authenticate' do
       before(:each) do
-        @manager = create :user, :manager
-        auth_request @manager
+        @admin = create :admin
+        auth_request @admin
       end
 
       context 'when is successfully updated' do
@@ -195,14 +195,14 @@ RSpec.describe Api::V1::StocksController, type: :controller do
           delete :destroy, { id: @stock.id }
         end
 
-        it_behaves_like 'access forbidden'
+        it_behaves_like 'not authenticate'
 
       end
 
-      context 'as manager' do
+      context 'as admin' do
         before(:each) do
-          @manager = create :user, :manager
-          auth_request @manager
+          @admin = create :admin
+          auth_request @admin
         end
 
         context 'when stock exists' do
