@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::OrdersController, type: :controller do
-  let(:manager) { create :user, :manager }
+  let(:admin) { create :admin }
 
   describe 'GET #index' do
 
@@ -13,9 +13,9 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
       it_behaves_like 'not authenticate'
     end
 
-    context 'when authorised as manager' do
+    context 'when authorised as admin' do
       before(:each) do
-        auth_request manager
+        auth_request admin
         5.times { create :order }
         get :index
       end
@@ -54,9 +54,9 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
 
   describe 'GET #show' do
 
-    context 'when authorised as manager' do
+    context 'when authorised as admin' do
       before(:each) do
-        auth_request manager
+        auth_request admin
         @order = create :order
         get :show, id: @order.id
       end
@@ -173,7 +173,7 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
 
   describe 'PUT/PATCH #update' do
     before(:each) do
-      auth_request (create :user, :manager)
+      auth_request admin
       @order = create :order
     end
 
@@ -209,7 +209,7 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
 
     context 'when is successfully destroy' do
       before(:each) do
-        auth_request create(:user, :manager)
+        auth_request admin
         order = create :order
         delete :destroy, { id: order.id }
       end

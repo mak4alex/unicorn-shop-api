@@ -36,10 +36,6 @@ class Api::V1::ImagesController < ApplicationController
       params.fetch(:image, {}).permit(:file, :imageable_type, :imageable_id)
     end
 
-    def check_member!
-      not_authorized unless current_member
-    end
-
     def set_image
       @image = Image.find(params[:id])
     end

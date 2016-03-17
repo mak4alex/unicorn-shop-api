@@ -68,4 +68,8 @@ class ApplicationController < ActionController::Base
       devise_parameter_sanitizer.for(:account_update) << parameters
     end
 
+    def check_member!
+      not_authorized unless current_member
+    end
+
 end

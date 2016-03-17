@@ -64,10 +64,6 @@ class Api::V1::ReviewsController < ApplicationController
       params.fetch(:review, {}).permit(:title, :body, :rating, :product_id, image_ids: [])
     end
 
-    def check_member!
-      not_authorized unless current_member
-    end
-
     def only_owner!
       access_denied unless current_member.class == Admin || @review.user_id == current_member.id
     end

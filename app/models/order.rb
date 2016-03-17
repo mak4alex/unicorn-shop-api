@@ -1,11 +1,5 @@
 class Order < ActiveRecord::Base
-
-  belongs_to :user
-
-  has_one :contact
-
-  has_many :line_items
-  has_many :products, through: :line_items
+  include Fetchable
 
   STATUSES = %w(progress done canceled)
   PAY_TYPES = %w(cash card)
@@ -23,7 +17,13 @@ class Order < ActiveRecord::Base
 
   before_validation :set_initial_status
 
-  include Fetchable
+
+  belongs_to :user
+
+  has_one :contact, dependent: :nullify
+
+  has_many :line_items
+  has_many :products, through: :line_items
 
 
   def set_initial_status
@@ -31,11 +31,9 @@ class Order < ActiveRecord::Base
   end
 
   def count_total
-    sum = 0
-    line_items.each do |line_item|
+    line_items.inject(0) do |sum, line_item|
       sum += line_item.quantity * line_item.product.price
     end
-    sum
   end
 
   def total_sum_set_correctly

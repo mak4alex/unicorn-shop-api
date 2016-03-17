@@ -1,22 +1,26 @@
 class Api::V1::OrdersController < ApplicationController
-  before_action :authenticate_api_user!
-  before_action :manager_only!, only: [:update, :destroy]
-  before_action :set_order, only: [:show, :update, :destroy]
+  before_action :authenticate_member!,    only: [:index, :show]
+  before_action :check_member!,           only: [:index, :show]
+  before_action :set_order,               only: [:show, :update, :destroy]
   before_action :only_customer_own_order, only: [:show]
+  before_action :authenticate_api_admin!, only: [:update, :destroy]
 
+  api!
   def index
-     if current_api_user.manager?
+     if current_member.class == Admin
        orders =  Order.fetch(params)
      else
-       orders = current_api_user.orders.fetch(params)
+       orders = current_member.orders.fetch(params)
      end
      render json: orders, meta: get_meta(orders, params)
   end
 
+  api!
   def show
     render json: @order
   end
 
+  api!
   def create
     order = Order.make_order(order_params, current_api_user)
     if order.save
@@ -27,6 +31,7 @@ class Api::V1::OrdersController < ApplicationController
     end
   end
 
+  api!
   def update
     if @order.update(order_params)
       render json: @order, status: 200, location: [:api, @order]
@@ -35,6 +40,7 @@ class Api::V1::OrdersController < ApplicationController
     end
   end
 
+  api!
   def destroy
     @order.destroy
     head 204
@@ -53,7 +59,7 @@ class Api::V1::OrdersController < ApplicationController
     end
 
     def only_customer_own_order
-      access_denied unless current_api_user.manager? || @order.user_id == current_api_user.id
+      access_denied unless current_member.class == Admin || @order.user_id == current_member.id
     end
 
 end
