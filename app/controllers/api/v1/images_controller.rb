@@ -3,18 +3,18 @@ class Api::V1::ImagesController < ApplicationController
   before_action :authenticate_member!, only: [:create, :destroy]
   before_action :check_member!,        only: [:create, :destroy]
 
-
+  api!
   def index
     images = Image.fetch(params)
     render json: { images: images, meta: get_meta(images, params) }
   end
 
-
+  api!
   def show
     render json: @image
   end
 
-
+  api!
   def create
     @image = Image.new(image_params)
     if @image.save
@@ -24,6 +24,7 @@ class Api::V1::ImagesController < ApplicationController
     end
   end
 
+  api!
   def destroy
     @image.destroy
     head 204
