@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ReviewsController, type: :controller do
+  let(:admin) { create :admin }
   let(:user) { create :user }
   let(:product) { create :product }
 
@@ -103,6 +104,16 @@ RSpec.describe Api::V1::ReviewsController, type: :controller do
         @bob = user
         auth_request @bob
         review = create :review, user: @bob
+        delete :destroy, { id: review.id }
+      end
+
+      it { should respond_with 204 }
+    end
+
+    context 'when authorized as admin' do
+      before(:each) do
+        auth_request admin
+        review = create :review
         delete :destroy, { id: review.id }
       end
 

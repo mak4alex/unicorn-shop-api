@@ -1,7 +1,8 @@
 class Api::V1::ReviewsController < ApplicationController
-  before_action :set_review,              only: [:show, :update, :destroy]
-  before_action :authenticate_api_user!,  only: [:create, :update, :destroy]
-  before_action :only_owner!,             only: [:update, :destroy]
+  before_action :set_review,           only: [:show, :update, :destroy]
+  before_action :authenticate_member!, only: [:create, :update, :destroy]
+  before_action :check_member!, only: [:create, :update, :destroy]
+  before_action :only_owner!,          only: [:update, :destroy]
 
   api! 'List all reviews'
   def index
@@ -63,8 +64,12 @@ class Api::V1::ReviewsController < ApplicationController
       params.fetch(:review, {}).permit(:title, :body, :rating, :product_id, image_ids: [])
     end
 
+    def check_member!
+      not_authorized unless current_member
+    end
+
     def only_owner!
-      access_denied unless @review.user_id == current_api_user.id
+      access_denied unless current_member.class == Admin || @review.user_id == current_member.id
     end
 
 end

@@ -3,18 +3,10 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :null_session
 
-
   before_action :configure_permitted_parameters, if: :devise_controller?
-  #before_action :cors_set_access_control_headers
 
-  def cors_set_access_control_headers
-    headers['Access-Control-Allow-Credentials'] = 'true'
-    headers['Access-Control-Max-Age'] = '1000'
-    headers['Access-Control-Allow-Origin'] = '*'
-    headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS, HEAD'
-    headers['Access-Control-Request-Method'] = '*'
-    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Client-Security-Token, Accept-Encoding'
-  end
+  devise_token_auth_group :member, contains: [:api_user, :api_admin]
+
 
   rescue_from ActiveRecord::RecordNotFound,  with: :not_found
 
@@ -26,8 +18,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def manager_only!
-    access_denied unless current_api_user.manager?
+
+  def not_authorized
+    api_error(status: 401, errors: ['Authorized users only.'])
   end
 
   def access_denied
