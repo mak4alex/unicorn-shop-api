@@ -1,11 +1,12 @@
 class Api::V1::ImagesController < ApplicationController
-  respond_to :json
-  before_action :authenticate_api_user!, only: [:create, :destroy]
-  before_action :set_image, only: [:show, :destroy]
+  before_action :set_image,            only: [:show, :destroy]
+  before_action :authenticate_member!, only: [:create, :destroy]
+  before_action :check_member!,        only: [:create, :destroy]
 
 
   def index
-    respond_with Image.all
+    images = Image.fetch(params)
+    render json: { images: images, meta: get_meta(images, params) }
   end
 
 
@@ -32,6 +33,10 @@ class Api::V1::ImagesController < ApplicationController
 
     def image_params
       params.fetch(:image, {}).permit(:file, :imageable_type, :imageable_id)
+    end
+
+    def check_member!
+      not_authorized unless current_member
     end
 
     def set_image

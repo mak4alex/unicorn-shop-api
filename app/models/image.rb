@@ -1,4 +1,6 @@
 class Image < ActiveRecord::Base
+  include Fetchable
+
   belongs_to :imageable, polymorphic: true
 
   IMAGEABLE_TYPES = %w( Product Review )

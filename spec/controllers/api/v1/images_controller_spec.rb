@@ -109,7 +109,7 @@ RSpec.describe Api::V1::ImagesController, type: :controller do
         delete :destroy, { id: @image.id }
       end
 
-      it_behaves_like 'not authenticate'
+      it { should respond_with 401 }
     end
 
   end
