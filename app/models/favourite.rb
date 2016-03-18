@@ -1,4 +1,7 @@
 class Favourite < ActiveRecord::Base
+  include Fetchable
+
+
   belongs_to :user
   belongs_to :product
 

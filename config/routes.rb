@@ -16,7 +16,8 @@ Rails.application.routes.draw do
       end
       resources :products,   only: [:index, :show, :create, :update, :destroy]
       resources :images,     only: [:index, :show, :create, :update, :destroy]
-      resources :orders,     only: [:index, :show, :create, :update, :destroy]
+      resources :orders,     only: [:index, :create, :destroy]
+      resources :favourites, only: [:index, :show, :create, :update, :destroy]
       resources :reviews,    only: [:index, :show, :create, :update, :destroy]
       resources :stocks,     only: [:index, :show, :create, :update, :destroy] do
         get 'products', on: :member
