@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :favourite do
     user
-    product
+    product { create :product }
   end
 end
