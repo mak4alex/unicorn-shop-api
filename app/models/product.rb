@@ -1,4 +1,15 @@
 class Product < ActiveRecord::Base
+  include Fetchable
+  include Imageable
+
+
+  validates :title, presence: true, uniqueness: { case_sensitive: false },
+            length: { minimum: 3, maximum: 64 }
+  validates :description, presence: true, length: { minimum: 16 }
+  validates :quantity, numericality: { only_integer: true }
+  validates :price, presence: true, numericality: { greater_than: 0.0 }
+  validates :category_id, presence: true
+  validates :weight, presence: true
 
   belongs_to :category
   belongs_to :stock
@@ -10,45 +21,35 @@ class Product < ActiveRecord::Base
   has_many :fans, through: :favourites, source: :user
   has_many :reviews
 
-  validates :title, presence: true, uniqueness: { case_sensitive: false },
-            length: { minimum: 3, maximum: 64 }
-  validates :description, presence: true, length: { minimum: 16 }
-  validates :quantity, numericality: { only_integer: true }
-  validates :price, presence: true, numericality: { greater_than: 0.0 }
-  validates :category_id, presence: true
-  validates :weight, presence: true
+  scope :filter_by_query, -> (key) do
+    if key
+      param = "%#{key.downcase}%"
+      where('lower(title) LIKE ? OR lower(description) LIKE ?', param, param)
+    end
+  end
 
-  scope :filter_by_title,
-        (lambda do |keyword|
-          where('lower(title) LIKE ?', "%#{keyword.downcase}%") if keyword
-        end)
+  scope :in_category, -> (category_id) { where( 'category_id = ?', category_id) if category_id  }
 
-  scope :in_category, lambda { |category_id| where( 'category_id = ?', category_id) if category_id  }
+  scope :above_or_equal_to_price, -> (price) { where( 'price >= ?', price) if price }
+  scope :below_or_equal_to_price, -> (price) { where( 'price <= ?', price) if price }
 
-  scope :above_or_equal_to_price, lambda { |price| where( 'price >= ?', price) if price }
-  scope :below_or_equal_to_price, lambda { |price| where( 'price <= ?', price) if price }
+  scope :above_or_equal_to_quantity, -> (quantity) { where( 'quantity >= ?', quantity) if quantity }
+  scope :below_or_equal_to_quantity, -> (quantity) { where( 'quantity <= ?', quantity) if quantity }
 
-  scope :above_or_equal_to_quantity, lambda { |quantity| where( 'quantity >= ?', quantity) if quantity }
-  scope :below_or_equal_to_quantity, lambda { |quantity| where( 'quantity <= ?', quantity) if quantity }
+  scope :above_or_equal_to_weight, -> (weight) { where( 'weight >= ?', weight) if weight }
+  scope :below_or_equal_to_weight, -> (weight) { where( 'weight <= ?', weight) if weight }
 
-  scope :above_or_equal_to_weight, lambda { |weight| where( 'weight >= ?', weight) if weight }
-  scope :below_or_equal_to_weight, lambda { |weight| where( 'weight <= ?', weight) if weight }
+  scope :search, -> (params) do
+    in_category(params[:category_id])
+        .filter_by_query(params[:query])
+        .above_or_equal_to_price(params[:min_price])
+        .below_or_equal_to_price(params[:max_price])
+        .above_or_equal_to_quantity(params[:min_quantity])
+        .below_or_equal_to_quantity(params[:max_quantity])
+        .above_or_equal_to_weight(params[:min_weight])
+        .below_or_equal_to_weight(params[:max_weight])
+  end
 
-  scope :search,
-        (lambda do |params|
-          in_category(params[:category_id])
-              .filter_by_title(params[:title])
-              .above_or_equal_to_price(params[:min_price])
-              .below_or_equal_to_price(params[:max_price])
-              .above_or_equal_to_quantity(params[:min_quantity])
-              .below_or_equal_to_quantity(params[:max_quantity])
-              .above_or_equal_to_weight(params[:min_weight])
-              .below_or_equal_to_weight(params[:max_weight])
-        end)
-
-
-  include Fetchable
-  include Imageable
 
   def decrease_quantity_by (count)
     self.quantity -= count
