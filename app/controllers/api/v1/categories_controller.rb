@@ -3,9 +3,9 @@ class Api::V1::CategoriesController < ApplicationController
   before_action :set_category,            only: [:show, :update, :destroy,
                                                  :products, :subcategories]
 
-  api! 'List all parent categories'
+  api! 'List all categories'
   def index
-    categories = Category.parent_categories.fetch(params)
+    categories = Category.search(params).fetch(params)
     render json: categories, meta: get_meta(categories, params)
   end
 

@@ -12,13 +12,22 @@ class Category < ActiveRecord::Base
   validates :description, length: { minimum: 16, maximum: 255 }
   validates :shop, presence: true, if: 'parent_category_id.nil?'
 
-  scope :parent_categories, -> { where(parent_category_id: nil) }
+  scope :parent_categories, -> (params) { where(parent_category_id: nil) if params[:top] }
+
+  scope :sub_categories, -> (params) { where(parent_category_id: params[:parent]) if params[:parent] }
 
   scope :most_popular, -> do
     select('categories.*, sum(line_items.quantity) as popularity')
         .joins(products: [:line_items])
         .group('categories.id')
         .order('popularity desc')
+  end
+
+  scope :search, -> (params) do
+
+    sub_categories(params).parent_categories(params)
+
+
   end
 
 end
