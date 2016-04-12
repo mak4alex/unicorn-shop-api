@@ -30,6 +30,8 @@ class Product < ActiveRecord::Base
 
   scope :in_category, -> (category_id) { where( 'category_id = ?', category_id) if category_id  }
 
+  scope :get_by_title, -> (title) { where('lower(title) LIKE ?', title) if title  }
+
   scope :above_or_equal_to_price, -> (price) { where( 'price >= ?', price) if price }
   scope :below_or_equal_to_price, -> (price) { where( 'price <= ?', price) if price }
 
@@ -41,13 +43,14 @@ class Product < ActiveRecord::Base
 
   scope :search, -> (params) do
     in_category(params[:category_id])
-        .filter_by_query(params[:query])
-        .above_or_equal_to_price(params[:min_price])
-        .below_or_equal_to_price(params[:max_price])
-        .above_or_equal_to_quantity(params[:min_quantity])
-        .below_or_equal_to_quantity(params[:max_quantity])
-        .above_or_equal_to_weight(params[:min_weight])
-        .below_or_equal_to_weight(params[:max_weight])
+      .filter_by_query(params[:query])
+      .get_by_title(params[:title])
+      .above_or_equal_to_price(params[:min_price])
+      .below_or_equal_to_price(params[:max_price])
+      .above_or_equal_to_quantity(params[:min_quantity])
+      .below_or_equal_to_quantity(params[:max_quantity])
+      .above_or_equal_to_weight(params[:min_weight])
+      .below_or_equal_to_weight(params[:max_weight])
   end
 
 
