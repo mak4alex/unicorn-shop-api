@@ -1,5 +1,6 @@
 class Category < ActiveRecord::Base
   include Fetchable
+  include ActiveModel::Serialization
 
   has_many   :subcategories, class_name: 'Category', foreign_key: 'parent_category_id'
   has_many   :products
@@ -26,7 +27,6 @@ class Category < ActiveRecord::Base
   scope :search, -> (params) do
 
     sub_categories(params).parent_categories(params)
-
 
   end
 

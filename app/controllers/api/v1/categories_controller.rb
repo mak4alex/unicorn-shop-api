@@ -14,6 +14,12 @@ class Api::V1::CategoriesController < ApplicationController
     render json: { count: Category.count }
   end
 
+  api! 'Show categories as menu'
+  def menu
+    render json: Category.search({ top: true }), 
+           each_serializer: CategoryMenuSerializer, root: false
+  end
+
   api! 'Show category with id'
   def show
     render json: @category

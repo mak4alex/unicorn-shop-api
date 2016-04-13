@@ -8,11 +8,16 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'User',  at: 'user'
       mount_devise_token_auth_for 'Admin', at: 'admin'
 
-      resources :users,         only: [:index, :show, :create, :update, :destroy]
-      resources :categories,    only: [:index, :show, :create, :update, :destroy] do
-        get 'products',      on: :member
-        get 'subcategories', on: :member
-        get 'count',         on: :collection
+      resources :users,         except: [:new, :edit]
+      resources :categories,    except: [:new, :edit] do
+        member do
+          get 'products'
+          get 'subcategories'
+        end
+        collection do
+          get 'count'
+          get 'menu'
+        end      
       end
       resources :products,      only: [:index, :show, :create, :update, :destroy]
       resources :distributions, only: [:index, :show, :create, :update, :destroy]
