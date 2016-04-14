@@ -30,7 +30,12 @@ class Product < ActiveRecord::Base
 
   scope :in_category, -> (category_id) { where( 'category_id = ?', category_id) if category_id  }
 
-  scope :get_by_title, -> (title) { where('lower(title) LIKE ?', title) if title  }
+  scope :get_by_title, -> (title) do 
+    if title
+      param = "%#{title.downcase}%"
+      where('lower(title) LIKE ?', param)      
+    end
+  end
 
   scope :above_or_equal_to_price, -> (price) { where( 'price >= ?', price) if price }
   scope :below_or_equal_to_price, -> (price) { where( 'price <= ?', price) if price }
