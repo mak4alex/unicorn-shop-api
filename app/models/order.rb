@@ -41,7 +41,7 @@ class Order < ActiveRecord::Base
   end
 
   def self.make_order(params, user)
-    order = Order.new(total: params[:total], user_id: user.id, pay_type: params[:pay_type], delivery_type: params[:delivery_type])
+    order = Order.new(total: params[:total], user: user, pay_type: params[:pay_type], delivery_type: params[:delivery_type])
     params[:line_items].each { |line_item| order.line_items.build(line_item) }
     order.build_contact(params[:contact])
     order

@@ -5,14 +5,14 @@ RSpec.describe OrderMailer, type: :mailer do
 
   describe '.send_confirmation' do
     before(:each) do
-      @user = create :user
-      @order = create :order, user: @user
+      @contact = create :contact
+      @order = create :order, contact: @contact
 
       @order_mailer = OrderMailer.send_confirmation(@order)
     end
 
     it 'should be set to be delivered to the user from the order passed in' do
-      expect(@order_mailer).to deliver_to(@user.email)
+      expect(@order_mailer).to deliver_to(@contact.email)
     end
 
     it 'should be set to be send from from@example.com' do

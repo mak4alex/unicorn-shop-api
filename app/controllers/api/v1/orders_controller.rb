@@ -22,7 +22,7 @@ class Api::V1::OrdersController < ApplicationController
 
   api!
   def create
-    order = Order.make_order(order_params, current_api_user)
+    order = Order.make_order(order_params, current_member)
     if order.save
       OrderMailer.send_confirmation(order).deliver_now
       render json: order, status: 201, location: [:api, order]
