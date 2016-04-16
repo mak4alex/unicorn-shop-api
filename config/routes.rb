@@ -4,9 +4,9 @@ Rails.application.routes.draw do
   root to: 'application#welcome'
   apipie
   namespace :api, defaults: { format: :json } do
-    scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
+    scope module: :v1, constraints: ApiConstraints.new(default: true) do
       mount_devise_token_auth_for 'User',  at: 'user'
-      mount_devise_token_auth_for 'Admin', at: 'admin'
+      mount_devise_token_auth_for 'Admin', at: 'admin', skip: [:registrations]
 
       resources :users,         except: [:new, :edit]
       resources :categories,    except: [:new, :edit] do
@@ -19,13 +19,13 @@ Rails.application.routes.draw do
           get 'menu'
         end      
       end
-      resources :products,      only: [:index, :show, :create, :update, :destroy]
-      resources :distributions, only: [:index, :show, :create, :update, :destroy]
-      resources :images,        only: [:index, :show, :create, :update, :destroy]
-      resources :orders,        only: [:index, :show, :create, :update, :destroy]
-      resources :favourites,    only: [:index, :create, :destroy]
-      resources :reviews,       only: [:index, :show, :create, :update, :destroy]
-      resources :stocks,        only: [:index, :show, :create, :update, :destroy] do
+      resources :products,      except: [:new, :edit]
+      resources :distributions, except: [:new, :edit]
+      resources :images,        except: [:new, :edit]
+      resources :orders,        except: [:new, :edit]
+      resources :favourites,    only:   [:index, :create, :destroy]
+      resources :reviews,       except: [:new, :edit]
+      resources :stocks,        except: [:new, :edit] do
         get 'products', on: :member
         get 'count',    on: :collection
       end

@@ -1,6 +1,6 @@
 class ApiConstraints
   def initialize(options)
-    @version = options[:version]
+    @version = options[:version] || 1
     @default = options[:default]
   end
 
