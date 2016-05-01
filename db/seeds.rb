@@ -83,13 +83,14 @@ Category.where.not(parent_category_id: nil).find_each do |category|
         published: true,
         category: category,
         weight: rand.round(4) * 1000,
-        stock_id: n % 10 == 0 ? Stock.ids.sample : nil
+        stock_id: n % 10 == 0 ? Stock.ids.sample : nil,
+        rating: 0.0
       })
     3.times do |i|
       Image.create!(
         {
           file: Rack::Test::UploadedFile.new(
-            File.join(Rails.root, 'spec', 'support', "product_image#{i}.jpg"))
+            File.join(Rails.root, 'spec', 'support', "product_image#{i}.jpg")),
           imageable_type: 'Product',
           imageable_id: Product.last.id
         })
