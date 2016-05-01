@@ -53,7 +53,7 @@ end
           shop: shop
       })
 
-  1.upto(10) do |k|
+  1.upto(5) do |k|
     Category.create!(
         {
           title: "SubCategory ##{n}.#{k}",
@@ -75,16 +75,25 @@ end
 Category.where.not(parent_category_id: nil).find_each do |category|
   20.times do |n|
     Product.create!(
+      {
+        title: "Product #{category.id}.#{n}",
+        description: FFaker::Lorem.paragraph,
+        price: rand.round(4) * 100,
+        quantity: rand(50..100),
+        published: true,
+        category: category,
+        weight: rand.round(4) * 1000,
+        stock_id: n % 10 == 0 ? Stock.ids.sample : nil
+      })
+    3.times do |i|
+      Image.create!(
         {
-          title: "Product #{category.id}.#{n}",
-          description: FFaker::Lorem.paragraph,
-          price: rand.round(4) * 100,
-          quantity: rand(50..100),
-          published: true,
-          category: category,
-          weight: rand.round(4) * 1000,
-          stock_id: n % 10 == 0 ? Stock.ids.sample : nil
+          file: Rack::Test::UploadedFile.new(
+            File.join(Rails.root, 'spec', 'support', "product_image#{i}.jpg"))
+          imageable_type: 'Product',
+          imageable_id: Product.last.id
         })
+    end
   end
 end
 

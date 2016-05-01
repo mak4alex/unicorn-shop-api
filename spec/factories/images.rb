@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :image do
-    file { Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'product_image.jpg')) }
+    file { Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'product_image0.jpg')) }
 
     factory :product_image do
       imageable_type 'Product'
