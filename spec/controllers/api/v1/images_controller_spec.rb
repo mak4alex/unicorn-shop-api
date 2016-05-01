@@ -46,8 +46,8 @@ RSpec.describe Api::V1::ImagesController, type: :controller do
       it 'renders the json representation for the image just created' do
         image_response = json_response[:image]
         expect(image_response[:imageable_id]).to eql @image_attributes[:imageable_id]
-        expect(image_response[:image]).to end_with 'product_image.jpg'
-        expect(image_response[:thumb]).to end_with 'thumb_product_image.jpg'
+        expect(image_response[:image]).to end_with 'product_image0.jpg'
+        expect(image_response[:thumb]).to end_with 'thumb_product_image0.jpg'
       end
 
       it { should respond_with 201 }
