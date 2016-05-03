@@ -2,6 +2,8 @@ class Contact < ActiveRecord::Base
   belongs_to :order
 
   validates :email, presence: true
+  validates_format_of :email, with: Devise::email_regexp
+  
   validates :name, presence: true
   validates :phone, presence: true
   validates :country, presence: true
