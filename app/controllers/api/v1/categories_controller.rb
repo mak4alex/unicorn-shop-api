@@ -34,7 +34,8 @@ class Api::V1::CategoriesController < ApplicationController
   api! 'List products on category'
   def products
     products = @category.products.fetch(params)
-    render json: { products: products, meta: get_meta(products, params) }
+    json_products = ActiveModel::ArraySerializer.new(products, each_serializer: ProductSerializer)
+    render json: { products: json_products, meta: get_meta(products, params) }
   end
 
   def_param_group :category do

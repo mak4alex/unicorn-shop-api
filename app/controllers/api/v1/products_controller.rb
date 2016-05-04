@@ -5,7 +5,8 @@ class Api::V1::ProductsController < ApplicationController
   api! 'List all products'
   def index
     products = Product.search(params).fetch(params)
-    render json: { products: products, meta: get_meta(products, params) }
+    json_products = ActiveModel::ArraySerializer.new(products, each_serializer: ProductSerializer)
+    render json: { products: json_products, meta: get_meta(products, params) }
   end
 
   api! 'Show product with id'
