@@ -2,7 +2,6 @@ class Api::V1::FavouritesController < ApplicationController
   before_action :authenticate_member!
   before_action :check_member!
 
-
   api!
   def index
     if current_member.class == Admin
@@ -11,6 +10,12 @@ class Api::V1::FavouritesController < ApplicationController
       favourites = current_member.favourites.fetch(params)
     end
     render json: favourites, meta: get_meta(favourites, params)
+  end
+
+  api!
+  def products
+    favourite_products = current_member.favourite_products.fetch(params)
+    render json: favourite_products, meta: get_meta(favourite_products, params)
   end
 
   api!
