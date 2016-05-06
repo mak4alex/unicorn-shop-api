@@ -23,7 +23,9 @@ Rails.application.routes.draw do
       resources :distributions, except: [:new, :edit]
       resources :images,        except: [:new, :edit]
       resources :orders,        except: [:new, :edit]
-      resources :favourites,    only:   [:index, :create, :destroy]
+      resources :favourites,    only:   [:index, :create, :destroy] do
+        get 'products', on: :collection
+      end
       resources :reviews,       except: [:new, :edit]
       resources :stocks,        except: [:new, :edit] do
         get 'products', on: :member

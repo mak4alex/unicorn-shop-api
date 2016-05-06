@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5.1'
+gem 'rails', '4.2.6'
 # Making it easy to serialize models for client-side use
 gem 'active_model_serializers', '~> 0.9.4'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -10,6 +10,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'capistrano-rails', group: :development
 # Token based authentication for Rails JSON APIs. Designed to work with jToker and ng-token-auth.
 gem 'devise_token_auth', '~> 0.1.37'
+
+gem 'puma', '~> 3.4'
 
 gem 'apipie-rails', '~> 0.3.5'
 # Upload files, map them to a range of ORMs, store them on different backends.
@@ -32,7 +34,6 @@ gem 'rack-cors', :require => 'rack/cors'
 group :production do
   gem 'pg', '~> 0.18.4'
   gem 'rails_12factor', '~> 0.0.3'
-  gem 'puma', '~> 2.16'
   gem 'fog-google', '~> 0.1.0'
 end
 

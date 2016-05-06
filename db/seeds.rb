@@ -27,7 +27,7 @@ Admin.create!(
       password_confirmation: 'manager@example.com'
     })
 
-1.upto(200) do |n|
+1.upto(100) do |n|
   User.create!(
       {
         email: "user#{n}@example.com",
@@ -53,7 +53,7 @@ end
           shop: shop
       })
 
-  1.upto(5) do |k|
+  1.upto(3) do |k|
     Category.create!(
         {
           title: "SubCategory ##{n}.#{k}",
@@ -86,7 +86,7 @@ Category.where.not(parent_category_id: nil).find_each do |category|
         stock_id: n % 10 == 0 ? Stock.ids.sample : nil,
         rating: 0.0
       })
-    3.times do |i|
+    1.times do |i|
       Image.create!(
         {
           file: Rack::Test::UploadedFile.new(
