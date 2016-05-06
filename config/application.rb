@@ -62,5 +62,7 @@ module MarketPlaceApi
       'Access-Control-Expose-Headers' => ['access-token', 'expiry', 'token-type', 'uid', 'client'].join(',')
     }
 
+    config.assets.initialize_on_precompile = false
+
   end
 end
